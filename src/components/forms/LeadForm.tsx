@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { CircleAlert, CircleCheck, FileText, LoaderCircle, Upload, X } from "lucide-react";
-import { QuoteAction } from "@/components/ui/Claim";
+import { PrimaryAction } from "@/components/ui/Claim";
 import { buttonClass, cx } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
 import {
@@ -322,7 +322,7 @@ export function LeadForm({
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <QuoteAction>
+        <PrimaryAction>
           <button type="submit" disabled={status === "submitting"} className={buttonClass("primary", "disabled:cursor-progress disabled:opacity-80")}>
             {status === "submitting" ? (
               <>
@@ -333,7 +333,7 @@ export function LeadForm({
               submitLabel
             )}
           </button>
-        </QuoteAction>
+        </PrimaryAction>
         <p className="text-[15px] text-body sm:pt-3.5">
           Prefer to talk?{" "}
           <a href={site.phone.href} className="font-medium text-navy underline underline-offset-2">

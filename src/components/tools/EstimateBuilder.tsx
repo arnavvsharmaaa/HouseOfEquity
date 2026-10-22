@@ -7,7 +7,7 @@ import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
 import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
-import { Claim, QuoteAction } from "@/components/ui/Claim";
+import { Claim, PrimaryAction } from "@/components/ui/Claim";
 import { buttonClass } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
 import { goals, stages, type Stage } from "@/lib/content/home";
@@ -150,12 +150,12 @@ export function EstimateBuilder() {
           </fieldset>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
-            <QuoteAction className="shrink-0">
+            <PrimaryAction className="shrink-0">
               <Link href={destinationFor(goal, stage)} className={buttonClass("primary")}>
                 See My Options
                 <ArrowRight aria-hidden className="size-5" />
               </Link>
-            </QuoteAction>
+            </PrimaryAction>
             <ul className="space-y-1 text-[16px] text-body">
               <li className="flex items-center gap-2">
                 <ShieldCheck aria-hidden className="size-5 shrink-0 text-navy" />

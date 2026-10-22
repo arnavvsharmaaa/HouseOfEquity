@@ -186,7 +186,7 @@ export function PaymentEstimator({ config = helocPayment }: { config?: PaymentCo
           </div>
         </dl>
         <div className="space-y-3">
-          <PrimaryAction tone="dark" align="center">
+          <PrimaryAction align="center">
             <Link
               href={config.ctaHref}
               className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-white px-7 text-[17px] font-medium text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-panel focus-visible:outline-white motion-safe:active:scale-[0.98]"

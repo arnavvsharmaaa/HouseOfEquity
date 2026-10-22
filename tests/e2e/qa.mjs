@@ -448,49 +448,22 @@ async function partners(browser) {
   await page.context().close();
 }
 
-// ---------- no footnote markers; disclosures in the footer; reassurance only on quote CTAs ----------
-
-// "Won't affect your credit score." appears only under buttons that start a quote, estimate or
-// application, at most once per section. Expected placements per route (button text).
-const QUOTE_CTAS = {
-  "/": ["Explore My Options", "See My Options"],
-  "/heloc": ["Check my HELOC options"],
-  "/rate-match": ["Submit My Offer for Review"],
-  "/contact": ["Send"],
-  "/contact?goal=equity": ["Send"],
-};
+// ---------- no footnote markers; disclosures in the footer; no credit-score reassurance line ----------
 
 async function claimsCheck(browser) {
   for (const route of [...ROUTES, "/contact?goal=equity"]) {
     for (const [w, h] of [[1440, 900], [390, 844]]) {
       const page = await open(browser, route, w, h);
-      const r = await page.evaluate(() => {
-        const lines = [...document.querySelectorAll("[data-reassurance]")];
-        const sections = new Map();
-        for (const p of lines) {
-          const s = p.closest("section, form, header, footer, nav, dialog") ?? document.body;
-          sections.set(s, (sections.get(s) ?? 0) + 1);
-        }
-        return {
-          sups: document.querySelectorAll("sup").length,
-          disclosures: document.querySelectorAll("footer li[id^='disclosure-']").length,
-          wording: [...new Set(lines.map((p) => p.textContent.trim()))],
-          ctas: lines.map((p) => p.closest("[data-quote-cta]")?.querySelector("a, button")?.textContent.trim() ?? "(outside a quote CTA)"),
-          inChrome: lines.filter((p) => p.closest("header, footer, nav, [data-track-location=mobile_bar], [data-track-location=final_cta]")).length,
-          maxPerSection: Math.max(0, ...sections.values()),
-        };
-      });
-      const expected = QUOTE_CTAS[route] ?? [];
-      const placed = r.ctas.length === expected.length && expected.every((t, i) => r.ctas[i].startsWith(t));
-      const wording = r.wording.every((t) => t === "Won't affect your credit score.");
+      const r = await page.evaluate(() => ({
+        sups: document.querySelectorAll("sup").length,
+        disclosures: document.querySelectorAll("footer li[id^='disclosure-']").length,
+        reassurance: /won.t affect your credit score/i.test(document.body.innerText),
+      }));
       log(
         "claims",
-        r.sups === 0 && r.disclosures > 0 && placed && wording && r.inChrome === 0 && r.maxPerSection <= 1,
-        `${route} @${w}: ${r.sups} superscripts, ${r.disclosures} footer disclosures, credit line under [${r.ctas.join(" | ")}]` +
-          (placed ? "" : ` (expected [${expected.join(" | ")}])`) +
-          (r.inChrome ? `; ${r.inChrome} in header/footer/nav/final CTA` : "") +
-          (r.maxPerSection > 1 ? `; ${r.maxPerSection} in one section` : "") +
-          (wording ? "" : `; unexpected wording: ${r.wording.join(" | ")}`),
+        r.sups === 0 && r.disclosures > 0 && !r.reassurance,
+        `${route} @${w}: ${r.sups} superscripts, ${r.disclosures} footer disclosures, ` +
+          (r.reassurance ? `"Won't affect your credit score." still on the page` : "no credit-score reassurance line"),
       );
       await page.context().close();
     }

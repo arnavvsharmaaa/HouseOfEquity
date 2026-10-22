@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Reassurance } from "@/components/ui/Claim";
 import { buttonClass } from "@/components/ui/primitives";
 import { track } from "@/lib/analytics";
 import { helocUses } from "@/lib/content/heloc";
@@ -14,8 +13,7 @@ export function HelocHeroForm() {
   const goal = helocUses.find((u) => u.value === use)?.goal ?? "equity";
 
   return (
-    <div data-quote-cta>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex-1">
           <label htmlFor="heloc-goal" className="mb-1 block text-[17px] font-medium text-ink">
             I want to
@@ -46,9 +44,6 @@ export function HelocHeroForm() {
         >
           Check my HELOC options
         </Link>
-    </div>
-    {/* Under the whole row, since the button sits beside the select. */}
-    <Reassurance />
     </div>
   );
 }

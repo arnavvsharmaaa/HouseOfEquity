@@ -38,10 +38,6 @@ export const claims = {
     value: "",
     note: "Client stories describe individual experiences and are not a guarantee of future results. Timelines, rates and outcomes vary.",
   },
-  credit: {
-    value: "Won't affect your credit score.",
-    note: "Talking with us, getting an estimate or a rate match review uses no credit check or only a soft inquiry, which does not affect your credit score. A hard credit inquiry happens only if you choose to submit a loan application.",
-  },
   closeDays: {
     value: "3 days",
     note: "Close in as few as 3 days: eligible digital HELOCs only. Funds released after the 3-day right of rescission. Subject to credit and property approval.",
