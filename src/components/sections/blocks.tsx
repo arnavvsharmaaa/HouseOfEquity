@@ -1,8 +1,9 @@
 // Page-level building blocks shared by the homepage, /heloc and the inner pages.
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, BadgeCheck, CalendarDays, Check, CircleCheck, FileUp, Quote, ShieldCheck, type LucideIcon } from "lucide-react";
+import { ArrowRight, BadgeCheck, CalendarDays, Check, CircleCheck, FileUp, ImageIcon, MessageSquare, Quote, ShieldCheck, type LucideIcon } from "lucide-react";
 import { SectionHeading, StepCards } from "./shared";
+import { Claim, PrimaryAction, Rich } from "@/components/ui/Claim";
 import {
   ButtonLink,
   Container,
@@ -13,12 +14,13 @@ import {
   cx,
 } from "@/components/ui/primitives";
 import { howItWorks, rateMatchSteps } from "@/lib/content/home";
-import { advisor, licensedStates, sponsor } from "@/lib/site";
+import { advisor, getStartedHref, site, sponsor } from "@/lib/site";
 
 /** Inner-page hero: badge, one H1, intro, check points, two actions, labeled photo slot. */
 export function PageHero({
   badge,
   title,
+  subhead,
   intro,
   points,
   primary,
@@ -28,6 +30,8 @@ export function PageHero({
 }: {
   badge: string;
   title: ReactNode;
+  /** A short second headline under the H1 (e.g. "Keep your current mortgage rate."). */
+  subhead?: { title: string; body: string };
   intro: ReactNode;
   points?: string[];
   primary?: { label: string; href: string };
@@ -49,6 +53,12 @@ export function PageHero({
             <h1 className="max-w-3xl text-[40px] font-medium leading-[1.1] tracking-tight text-ink sm:text-[52px] lg:text-[56px]">
               {title}
             </h1>
+            {subhead && (
+              <p data-keep-rate className="max-w-2xl">
+                <span className="block text-[24px] font-medium leading-snug text-ink">{subhead.title}</span>
+                <span className="text-[19px] text-body">{subhead.body}</span>
+              </p>
+            )}
             <div className="max-w-2xl text-[20px] leading-[32px] text-body">{intro}</div>
             {points && (
               <ul className="grid max-w-2xl gap-3 sm:grid-cols-2">
@@ -57,14 +67,20 @@ export function PageHero({
                     <span aria-hidden className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-line text-ink">
                       <Check className="size-4" strokeWidth={2.5} />
                     </span>
-                    {p}
+                    <span>
+                      <Rich text={p} />
+                    </span>
                   </li>
                 ))}
               </ul>
             )}
             {(primary || secondary) && (
-              <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
-                {primary && <ButtonLink href={primary.href}>{primary.label}</ButtonLink>}
+              <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-start">
+                {primary && (
+                  <PrimaryAction>
+                    <ButtonLink href={primary.href}>{primary.label}</ButtonLink>
+                  </PrimaryAction>
+                )}
                 {secondary}
               </div>
             )}
@@ -125,8 +141,12 @@ export function Explainer({
                       <Check className="size-4" strokeWidth={2.5} />
                     </span>
                     <span>
-                      <span className="block text-[19px] font-medium text-ink">{p.title}</span>
-                      <span className="text-[18px] leading-relaxed text-body">{p.body}</span>
+                      <span className="block text-[19px] font-medium text-ink">
+                        <Rich text={p.title} />
+                      </span>
+                      <span className="text-[18px] leading-relaxed text-body">
+                        <Rich text={p.body} />
+                      </span>
                     </span>
                   </li>
                 ))}
@@ -156,13 +176,17 @@ export function OptionCards({ cards, columns = 3 }: { cards: OptionCard[]; colum
                 </IconCircle>
               )}
               <h3 className="text-[22px] font-medium text-ink">{card.title}</h3>
-              <p className="text-[18px] leading-relaxed text-body">{card.body}</p>
+              <p className="text-[18px] leading-relaxed text-body">
+                <Rich text={card.body} />
+              </p>
               {card.points && (
                 <ul className="space-y-2 pt-1">
                   {card.points.map((p) => (
                     <li key={p} className="flex items-start gap-2 text-[17px] text-ink">
                       <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-navy" />
-                      {p}
+                      <span>
+                        <Rich text={p} />
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -223,7 +247,7 @@ export function CompareTable({
                 </th>
                 {row.values.map((v, i) => (
                   <td key={i} className={cx("p-5 text-[17px] lg:p-6", i === 0 ? "bg-panel font-semibold text-ink" : "text-body")}>
-                    {v}
+                    <Rich text={v} />
                   </td>
                 ))}
               </tr>
@@ -241,7 +265,9 @@ export function CompareTable({
                   <dt className={cx("text-[14px] font-semibold uppercase tracking-[0.06em]", i === 0 ? "text-white/80" : "text-navy")}>
                     {columns[i]}
                   </dt>
-                  <dd className={i === 0 ? "font-semibold" : "text-body"}>{v}</dd>
+                  <dd className={i === 0 ? "font-semibold" : "text-body"}>
+                    <Rich text={v} />
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -320,12 +346,12 @@ export function RateMatchSection({ withButton = true }: { withButton?: boolean }
             <StepCards steps={rateMatchSteps} />
           </div>
           {withButton && (
-            <div className="text-center">
+            <PrimaryAction align="center">
               <ButtonLink href="/rate-match">
                 <FileUp aria-hidden className="size-5" />
                 Submit My Offer for Review
               </ButtonLink>
-            </div>
+            </PrimaryAction>
           )}
         </div>
       </Container>
@@ -369,9 +395,9 @@ export function AdvisorSection() {
             </h2>
             <p className="text-[19px] leading-[30px] text-body">
               {advisor.name} is an independent mortgage broker licensed to originate residential
-              mortgage loans and home equity products in {licensedStates.length} states. As a former
+              mortgage loans and home equity products in <Claim id="states" /> states. As a former
               Director of Finance at one of the nation&apos;s largest mortgage lenders, Mohamad now
-              works directly for homeowners—shopping wholesale rates across 170+ lenders to find you
+              works directly for homeowners—shopping wholesale rates across <Claim id="lenders" /> lenders to find you
               the best loan.
             </p>
             <figure className="space-y-2 rounded-tile border border-l-4 border-line border-l-ink bg-white p-6">
@@ -382,11 +408,13 @@ export function AdvisorSection() {
               </blockquote>
               <figcaption className="text-[16px] font-semibold text-navy">— {advisor.name}</figcaption>
             </figure>
-            <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
-              <ButtonLink href="/contact?goal=equity">
-                <CalendarDays aria-hidden className="size-5" />
-                Schedule a Call
-              </ButtonLink>
+            <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-start">
+              <PrimaryAction>
+                <ButtonLink href="/contact?goal=equity">
+                  <CalendarDays aria-hidden className="size-5" />
+                  Schedule a Call
+                </ButtonLink>
+              </PrimaryAction>
               <PhoneButton />
             </div>
           </div>
@@ -411,5 +439,44 @@ export function HowItWorksSection() {
         <StepCards steps={howItWorks} />
       </Container>
     </section>
+  );
+}
+
+/** Mohamad's presence for the top of the homepage: portrait slot, name, NMLS, Text / Book buttons. */
+export function AdvisorPresence() {
+  const small =
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-[16px] font-medium transition-[background-color,transform] duration-150 ease-out motion-safe:active:scale-[0.98]";
+  return (
+    <div
+      data-advisor-presence
+      data-track-location="hero_advisor"
+      className="flex max-w-2xl flex-col gap-4 rounded-tile border border-line bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div className="flex items-center gap-3.5">
+        <span
+          role="img"
+          aria-label={`Portrait placeholder: ${advisor.name}`}
+          className="flex size-14 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-field bg-panel text-muted"
+        >
+          <ImageIcon aria-hidden className="size-5" strokeWidth={1.5} />
+        </span>
+        <div>
+          <p className="text-[18px] font-medium leading-tight text-ink">{advisor.name}</p>
+          <p className="text-[16px] text-body">
+            NMLS #{advisor.nmls} · Your mortgage advisor
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+        <a href={site.phone.sms} className={cx(small, "border border-ink bg-white text-ink hover:bg-panel")}>
+          <MessageSquare aria-hidden className="size-[18px] text-navy" />
+          Text Moe
+        </a>
+        <Link href={`${getStartedHref}?goal=equity`} className={cx(small, "bg-ink text-white hover:bg-ink-hover")}>
+          <CalendarDays aria-hidden className="size-[18px]" />
+          Book a call
+        </Link>
+      </div>
+    </div>
   );
 }

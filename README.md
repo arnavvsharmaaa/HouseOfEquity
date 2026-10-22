@@ -30,6 +30,7 @@ generated; only `/api/lead` runs on the server.
 
 | Path | What lives there |
 | --- | --- |
+| `src/lib/claims.ts` | **Every marketing claim and figure** with its footer disclosure. Copy writes `{{key}}` (value + footnote marker) or `{{^key}}` (marker only); footnote numbers follow this file's order, so they match on every page. |
 | `src/lib/site.ts` | **Single source of truth**: NMLS/DRE numbers, phone, email, offices, the 22 licensed states, nav. |
 | `src/lib/content/` | Page copy. `home.ts`/`heloc.ts` are verbatim from the designs; `pages.ts` marks each passage `[design]`, `[guide]` or `[new]`. |
 | `src/lib/seo.ts` | Metadata helper (canonical + OG/Twitter + share image) and JSON-LD builders. |
@@ -239,6 +240,16 @@ Plain-English explanations written for these pages, with no new numbers. Mohamad
 ### Top Lending Partners (homepage)
 - ⚠️ **Partner logos: confirm usage permission** for Rocket Pro (Elite Mortgage Broker badge), Spring EQ, EPM Wholesale, Nations Direct Mortgage, Kind Lending, LoanStream Mortgage, Figure and Broker Action Coalition. Files were copied from westcapitallending.com and mfardous.com into `public/partners/` (Figure and Spring EQ cropped to remove empty padding). Note the brand guide says "Do not … copy lender imagery or logos", so written permission from each company is needed.
 - ⚠️ **"Rocket Mortgage's #1 National Broker Partner, 4 years"** (homepage trust band) and the J.D. Power note (footer disclosures, footnote 1), both from mfardous.com: confirm the current wording and that the J.D. Power reference (2022 – 2023 studies) may still be used.
+
+### Footnotes, reassurance and hero presence
+- ⚠️ **Zillow profile URL and review count are placeholders**: `zillow.url` (`https://www.zillow.com/profile/PLACEHOLDER-mohamad-fardous/`) and `zillow.reviewCount` (`XX`) in `src/lib/site.ts`. The badge "5.0 on Zillow · XX reviews" appears in the homepage hero card, the homepage and About testimonials headers.
+- ⚠️ **Every numbered footer disclosure is draft wording** written for this preview in `src/lib/claims.ts`; each needs compliance review and, where it states a fact (lender network size, review count, response time), a source.
+- ⚠️ **"Won't affect your credit score."** now sits under every primary call to action, with a disclosure that only a loan application triggers a hard inquiry. Review it carefully on CTAs such as **"Start my pre-approval"** (`/buy`): a full pre-approval usually involves a hard credit pull, so the line may need different wording there.
+- ⚠️ **"Text Moe"** opens a text message to 949-569-7945: confirm that number accepts texts and that inbound texting is set up for compliant replies.
+- ⚠️ **"Book a call"** goes to the contact form; there is no scheduling tool yet. Add a booking link (e.g. Calendly) if Mohamad uses one.
+- ⚠️ **New copy, "Keep your current mortgage rate."** on `/heloc` and `/home-equity-loan`, with one plain sentence each explaining the product is a separate second loan.
+- ⚠️ On `/heloc`, the design's line "Talking with us won't affect your credit." was replaced by the standard reassurance line (same position) so the site says it one way.
+- ⚠️ **"$85,000 Equity Tapped"** (HELOC photo card) is footnoted as an illustrative example, not a client result.
 
 ### Missing data
 - ⚠️ Irvine office ZIP code (not supplied; omitted from address and JSON-LD).

@@ -101,7 +101,7 @@ async function keyboard(browser) {
       const page = await open(browser, route, w, h);
       let stops = 0;
       let problems = 0;
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 400; i++) {
         await page.keyboard.press("Tab");
         const f = await focusInfo(page);
         if (!f) continue;
@@ -445,18 +445,121 @@ async function partners(browser) {
   log("partners", row.every((i) => i.h >= 20 && i.h <= 36) && row.every((i) => i.gray.includes("grayscale")), `partner logo heights ${row.map((i) => i.h).join("/")}px (max 36), grayscale at rest`);
   const band = await section.evaluate((el) => ({ h: Math.round(el.getBoundingClientRect().height), text: el.innerText }));
   log("partners", band.h <= 320 && !band.text.includes("J.D. Power"), `compact band: ${band.h}px tall, J.D. Power note moved out`);
-  const marker = section.getByRole("link", { name: /Footnote 1/ });
-  await marker.click();
+  const marker = section.getByRole("link", { name: /^Disclosure \d+$/ });
+  // Keyboard path: focus the marker and press Enter (the sticky header can sit over it for a mouse click).
+  await marker.focus();
+  await page.keyboard.press("Enter");
+  await pause(200);
   const note = await page.evaluate(() => {
-    const el = document.querySelector("#fn-jd-power");
+    const el = document.querySelector("#fn-rocket");
     const r = el?.getBoundingClientRect();
     return el ? { text: el.innerText, visible: r.top >= 0 && r.bottom <= innerHeight } : null;
   });
-  log("partners", !!note && note.visible && /J.D. Power 2022 – 2023/.test(note.text) , `footnote marker scrolls to footer note 1 (visible: ${note?.visible})`);
+  log("partners", !!note && note.visible && /J.D. Power 2022 – 2023/.test(note.text) , `Rocket line marker scrolls to its footer disclosure (visible: ${note?.visible})`);
   await page.context().close();
 }
 
-const suites = { partners, layout, fit, seo, keyboard, keyboardInteractions, math, routing, stickyBar, forms, api };
+// ---------- claims, footnotes and reassurance on every page ----------
+const FIGURES = /170\+|\b3 days\b|\b\d+ states\b|10\+ years|\b5\.0\b|\$650|22%\+|3% down|0% down|24 hours|\$750,000|\$30B|640\+|85%|10 to 30 years|up to 10 years|8\.15|4 to 8 weeks|14-30%|3 to 7 days|tax-deductible|top broker|top rated/i;
+const CLAIM_EXEMPT = ["/licensing", "/privacy", "/terms"]; // these pages are the disclosures themselves
+
+async function claimsCheck(browser) {
+  for (const route of ROUTES) {
+    const page = await open(browser, route, 1440, 900);
+    const r = await page.evaluate(({ figures, exempt }) => {
+      const list = [...document.querySelectorAll("footer ol > li[id^='fn-']")];
+      const ids = list.map((li) => li.id);
+      // 1. every marker points at the footer entry with the same number
+      const badMarkers = [...document.querySelectorAll("sup[data-fn] a")]
+        .map((a) => ({ n: Number(a.textContent), id: a.getAttribute("href").slice(1) }))
+        .filter((m) => ids.indexOf(m.id) + 1 !== m.n)
+        .map((m) => `${m.n}→#${m.id}`);
+      // 2. every figure in page copy has a marker in the same block (FAQ questions excepted)
+      const unmarked = [];
+      if (!exempt) {
+        const blocks = document.querySelectorAll("main :is(p, li, td, dd, dt, h1, h2, h3, h4, span.block)");
+        for (const el of blocks) {
+          if (el.closest("summary, [aria-hidden=true], .sr-only") || el.querySelector("p, li, td, dd, h3")) continue;
+          const clone = el.cloneNode(true);
+          clone.querySelectorAll("sup, .sr-only").forEach((n) => n.remove());
+          const text = clone.textContent.replace(/\s+/g, " ").trim();
+          const m = text.match(new RegExp(figures, "i"));
+          if (m && !el.querySelector("sup[data-fn]") && !el.closest("li, p, td, dd")?.querySelector("sup[data-fn]")) unmarked.push(`"${m[0]}" in "${text.slice(0, 60)}"`);
+        }
+      }
+      // 3. every primary button in the page body sits in a [data-primary-cta] with the reassurance line
+      const primaries = [...document.querySelectorAll("main a.bg-ink, main button[type=submit], main .bg-ink a.bg-white")]
+        .filter((el) => !el.closest("[data-advisor-presence]") && el.getBoundingClientRect().width > 0);
+      const bare = primaries
+        .filter((el) => !el.closest("[data-primary-cta]")?.querySelector("[data-reassurance]"))
+        .map((el) => el.textContent.trim().slice(0, 30));
+      return { markers: document.querySelectorAll("sup[data-fn]").length, badMarkers, unmarked: [...new Set(unmarked)], primaries: primaries.length, bare, footnotes: ids.length };
+    }, { figures: FIGURES.source, exempt: CLAIM_EXEMPT.includes(route) });
+    const ok = r.badMarkers.length === 0 && r.unmarked.length === 0 && r.bare.length === 0 && r.footnotes > 0;
+    log(
+      "claims",
+      ok,
+      `${route}: ${r.markers} markers, ${r.primaries} primary CTAs with reassurance` +
+        (r.badMarkers.length ? `; markers not matching footer: ${r.badMarkers.join(", ")}` : "") +
+        (r.unmarked.length ? `; figures without a marker: ${r.unmarked.join(" | ")}` : "") +
+        (r.bare.length ? `; CTAs without reassurance: ${r.bare.join(", ")}` : ""),
+    );
+    await page.context().close();
+  }
+}
+
+// ---------- homepage presence, Zillow badge, keep-rate angle ----------
+async function presence(browser) {
+  for (const [w, h] of [[1366, 768], [1440, 900], [390, 844]]) {
+    const page = await open(browser, "/", w, h);
+    const r = await page.evaluate(() => {
+      const box = document.querySelector("[data-advisor-presence]");
+      const b = box.getBoundingClientRect();
+      const bar = document.querySelector("[data-track-location=mobile_bar]");
+      const barTop = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().top : innerHeight;
+      return {
+        aboveFold: b.bottom <= barTop,
+        bottom: Math.round(b.bottom),
+        limit: Math.round(barTop),
+        text: box.innerText.replace(/\s+/g, " "),
+        sms: box.querySelector('a[href^="sms:"]')?.getAttribute("href"),
+        book: [...box.querySelectorAll("a")].find((a) => /Book a call/.test(a.textContent))?.getAttribute("href"),
+        portrait: box.querySelector('[role=img]')?.getAttribute("aria-label"),
+        heights: [...box.querySelectorAll("a")].map((a) => Math.round(a.getBoundingClientRect().height)),
+      };
+    });
+    log(
+      "presence",
+      r.aboveFold && /Mohamad Fardous/.test(r.text) && /NMLS #1448893/.test(r.text) && r.sms === "sms:+19495697945" && !!r.book && /Portrait placeholder/.test(r.portrait ?? "") && r.heights.every((x) => x >= 44),
+      `${w}x${h}: advisor strip above the fold (bottom ${r.bottom}px ≤ ${r.limit}px), Text Moe → ${r.sms}, Book a call → ${r.book}, buttons ${r.heights.join("/")}px`,
+    );
+    await page.context().close();
+  }
+  const page = await open(browser, "/", 1440, 900);
+  const badges = await page.locator('a[href*="zillow.com/profile"]').evaluateAll((as) => as.map((a) => a.textContent.replace(/\s+/g, " ").trim()));
+  log("presence", badges.length >= 2 && badges.every((t) => /^5\.0 on Zillow · \S+ reviews/.test(t)), `Zillow badge links (${badges.length}): ${[...new Set(badges)].join(" | ")}`);
+  const ev = [];
+  await page.exposeFunction("__ev", (e) => ev.push(e));
+  await page.evaluate(() => {
+    window.dataLayer = window.dataLayer ?? [];
+    const push = window.dataLayer.push.bind(window.dataLayer);
+    window.dataLayer.push = (e) => { window.__ev(JSON.stringify(e)); return push(e); };
+    document.querySelector('a[href^="sms:"]').addEventListener("click", (e) => e.preventDefault());
+  });
+  await page.locator('a[href^="sms:"]').first().click();
+  await pause(200);
+  log("presence", ev.some((e) => e.includes("mortgage_phone_click") && e.includes('"method":"text"')), `Text Moe click tracked as mortgage_phone_click (method text)`);
+  await page.context().close();
+
+  for (const route of ["/heloc", "/home-equity-loan"]) {
+    const p = await open(browser, route, 1366, 768);
+    const t = await p.locator("[data-keep-rate]").first().evaluate((el) => ({ text: el.innerText, top: el.getBoundingClientRect().top }));
+    log("presence", /Keep your current mortgage rate/.test(t.text) && t.top < 768, `${route}: "${t.text.split("\n")[0]}" shown in the first screen (top ${Math.round(t.top)}px)`);
+    await p.context().close();
+  }
+}
+
+const suites = { claimsCheck, presence, partners, layout, fit, seo, keyboard, keyboardInteractions, math, routing, stickyBar, forms, api };
 const browser = await chromium.launch({ channel: CHANNEL, headless: process.env.PW_HEADLESS !== "false" });
 try {
   for (const [name, fn] of Object.entries(suites)) {

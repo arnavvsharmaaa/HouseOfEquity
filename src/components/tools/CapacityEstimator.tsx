@@ -7,6 +7,7 @@ import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
 import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
+import { PrimaryAction, Rich } from "@/components/ui/Claim";
 import { buttonClass, cx } from "@/components/ui/primitives";
 import { DEFAULT_CLTV, estimateEquity, formatUsd } from "@/lib/equity";
 import { getStartedHref } from "@/lib/site";
@@ -26,7 +27,7 @@ export type CapacityCopy = {
 // Defaults are the HELOC design's copy.
 const helocCopy: CapacityCopy = {
   title: "How much could I borrow with a HELOC?",
-  intro: "Lines of credit up to $750,000 across 170+ wholesale lending channels. You only pay for what you draw.",
+  intro: "Lines of credit up to {{helocLimits}} across {{lenders}} wholesale lending channels. You only pay for what you draw.",
   resultLead: "In this scenario, you could qualify to borrow up to:",
   ctaLabel: "Check my HELOC options",
   ctaHref: `${getStartedHref}?goal=equity`,
@@ -147,7 +148,7 @@ export function CapacityEstimator({ copy = helocCopy }: { copy?: CapacityCopy })
               {copy.title}
             </h2>
             <p className="text-[18px] leading-relaxed text-body">
-              {copy.intro}
+              <Rich text={copy.intro} />
             </p>
           </div>
           <div className="space-y-1 border-y border-line py-4">
@@ -162,10 +163,12 @@ export function CapacityEstimator({ copy = helocCopy }: { copy?: CapacityCopy })
           </div>
           <LiveAnnouncer message={`You could borrow up to ${formatUsd(capacity)}`} />
           <div className="space-y-3">
-            <Link href={copy.ctaHref} className={buttonClass("primary", "w-full")}>
-              {copy.ctaLabel}
-              <ArrowRight aria-hidden className="size-5" />
-            </Link>
+            <PrimaryAction align="center">
+              <Link href={copy.ctaHref} className={buttonClass("primary", "w-full")}>
+                {copy.ctaLabel}
+                <ArrowRight aria-hidden className="size-5" />
+              </Link>
+            </PrimaryAction>
             <p className="text-center text-[15px] leading-snug text-body">
               <strong className="font-semibold text-ink">*Illustration only. Not an approval or rate quote.</strong>{" "}
               Based on {cltvLabel} of your home&apos;s value. Actual amounts subject to full review.

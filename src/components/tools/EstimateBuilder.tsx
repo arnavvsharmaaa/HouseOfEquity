@@ -7,6 +7,7 @@ import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
 import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
+import { Claim, Fn, PrimaryAction } from "@/components/ui/Claim";
 import { buttonClass } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
 import { goals, stages, type Stage } from "@/lib/content/home";
@@ -148,15 +149,20 @@ export function EstimateBuilder() {
             <CltvField value={cltv} onChange={touch(setCltv)} />
           </fieldset>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-            <Link href={destinationFor(goal, stage)} className={buttonClass("primary", "shrink-0 self-start")}>
-              See My Options
-              <ArrowRight aria-hidden className="size-5" />
-            </Link>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+            <PrimaryAction className="shrink-0">
+              <Link href={destinationFor(goal, stage)} className={buttonClass("primary")}>
+                See My Options
+                <ArrowRight aria-hidden className="size-5" />
+              </Link>
+            </PrimaryAction>
             <ul className="space-y-1 text-[16px] text-body">
               <li className="flex items-center gap-2">
                 <ShieldCheck aria-hidden className="size-5 shrink-0 text-navy" />
-                No SSN or hard credit pull required
+                <span>
+                  No SSN or hard credit pull required
+                  <Fn id="credit" />
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <Lock aria-hidden className="size-5 shrink-0 text-navy" />
@@ -200,12 +206,17 @@ export function EstimateBuilder() {
                 <dd className="whitespace-nowrap font-medium text-ink">{formatUsd(equity)}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-body">Est. Monthly Savings:</dt>
+                <dt className="text-body">
+                  Est. Monthly Savings:
+                  <Fn id="savings" />
+                </dt>
                 <dd className="whitespace-nowrap font-medium text-ink">{formatUsd(capacity * 0.0028)} / mo</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-body">Speed to Funding:</dt>
-                <dd className="whitespace-nowrap font-medium text-navy">3 to 7 Days</dd>
+                <dd className="whitespace-nowrap font-medium text-navy">
+                  <Claim id="speedFunding" />
+                </dd>
               </div>
             </dl>
           </div>

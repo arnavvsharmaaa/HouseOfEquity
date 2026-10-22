@@ -42,7 +42,7 @@ export const equityBenefits = [
     body: "Automated valuation models often eliminate in-home appraiser visits.",
   },
   {
-    title: "Close in as few as 3 days*",
+    title: "Close in as few as {{closeDays}}",
     body: "Direct wholesale underwriting enables rapid funding when speed counts.",
   },
 ];
@@ -59,21 +59,21 @@ export const equityProducts: ProductCard[] = [
   {
     title: "HELOC (Line of Credit)",
     body: "Draw cash only when you need it and only pay interest on what you use. Ideal for ongoing renovations or an emergency safety net.",
-    points: ["Draw period up to 10 years", "Re-borrow as you pay it down"],
+    points: ["Draw period up to 10 years{{^loanTerms}}", "Re-borrow as you pay it down"],
     href: "/heloc",
     icon: "tree",
   },
   {
     title: "Fixed Home Equity Loan",
     body: "One lump sum with a fixed, predictable monthly payment that never changes. Perfect for major one-time investments or large expenses.",
-    points: ["Fixed rates from 10 to 30 years", "Zero prepayment penalties"],
+    points: ["Fixed rates from 10 to 30 years{{^loanTerms}}", "Zero prepayment penalties{{^loanTerms}}"],
     href: "/home-equity-loan",
     icon: "payments",
   },
   {
     title: "Debt Consolidation",
-    body: "Roll multiple high-interest cards (22%+) and personal loans into a single lower interest payment, freeing up hundreds every single month.",
-    points: ["Average monthly savings of $650+", "Simplify finances into one bill"],
+    body: "Roll multiple high-interest cards ({{cardRates}}) and personal loans into a single lower interest payment, freeing up hundreds every single month.{{^savings}}",
+    points: ["Average monthly savings of {{savings}}", "Simplify finances into one bill"],
     href: "/debt-consolidation",
     icon: "check",
   },
@@ -82,13 +82,13 @@ export const equityProducts: ProductCard[] = [
 export const purchaseProducts: ProductCard[] = [
   {
     title: "Conventional Purchase",
-    body: "Wholesale pricing with options starting at just 3% down. Fast pre-approvals that make your offers stand out in competitive markets.",
+    body: "Wholesale pricing with options starting at just {{downPayment}} down. Fast pre-approvals that make your offers stand out in competitive markets.",
     href: "/buy",
     icon: "cottage",
   },
   {
     title: "VA & FHA Financing",
-    body: "0% down options for military veterans and flexible credit guidelines for first-time homebuyers with sponsored lending speed.",
+    body: "0% down{{^downPayment}} options for military veterans and flexible credit guidelines for first-time homebuyers with sponsored lending speed.",
     href: "/buy",
     icon: "medal",
   },
@@ -106,12 +106,12 @@ export const rateMatchSteps = [
     body: "Email or upload any written loan estimate or fee sheet. No credit pull needed for a rate match evaluation.",
   },
   {
-    title: "We shop 170+ lenders",
+    title: "We shop {{lenders}} lenders",
     body: "We check our real-time wholesale network to find lower interest rates, waived fees, or better loan terms.",
   },
   {
     title: "Get a straight answer",
-    body: "In 24 hours, you get a clean breakdown showing exactly how much you can save, or our blessing to sign the other loan.",
+    body: "In {{rateMatch24}}, you get a clean breakdown showing exactly how much you can save, or our blessing to sign the other loan.",
   },
 ];
 
@@ -166,10 +166,10 @@ export const homeFaqs = [
   },
   {
     q: "How does House of Equity get paid as an independent broker?",
-    a: "In almost all cases, our broker fee is paid directly by the wholesale lender you choose—not out of your pocket. By shopping 170+ wholesale lenders, we often beat retail bank pricing even after broker compensation is factored in.",
+    a: "In almost all cases, our broker fee is paid directly by the wholesale lender you choose—not out of your pocket. By shopping {{lenders}} wholesale lenders, we often beat retail bank pricing even after broker compensation is factored in.",
   },
   {
     q: "How can a HELOC close in as few as 3 days?",
-    a: "Our specialized wholesale equity programs utilize automated property valuations (AVMs) and instant digital income verification. When a borrower qualifies for an appraisal waiver, the entire underwriting process takes hours instead of weeks.",
+    a: "Our specialized wholesale equity programs utilize automated property valuations (AVMs) and instant digital income verification. When a borrower qualifies for an appraisal waiver, the entire underwriting process takes hours instead of weeks.{{^closeDays}}",
   },
 ];

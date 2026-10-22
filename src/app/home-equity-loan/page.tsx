@@ -24,13 +24,17 @@ export default function HomeEquityLoanPage() {
       <PageHero
         badge="Fixed Home Equity Loan"
         title="Make More of What You Own."
+        subhead={{
+          title: "Keep your current mortgage rate.",
+          body: "A home equity loan is a separate second loan, so you can access your equity without refinancing your first mortgage.",
+        }}
         intro={
           <p>
             One lump sum with a fixed, predictable monthly payment that never changes. Perfect for
             major one-time investments or large expenses.
           </p>
         }
-        points={["Fixed rates from 10 to 30 years", "Zero prepayment penalties", "Keep your existing first mortgage", "Guidance from a licensed advisor"]}
+        points={["Fixed rates from 10 to 30 years{{^loanTerms}}", "Zero prepayment penalties{{^loanTerms}}", "Keep your existing first mortgage", "Guidance from a licensed advisor"]}
         primary={{ label: "Check my options", href: `${getStartedHref}?goal=equity` }}
         secondary={<PhoneButton />}
         image={{ alt: "Homeowners reviewing renovation plans at their kitchen table", note: "Lifestyle photo to be supplied" }}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { EqualHousingIcon } from "./EqualHousingIcon";
+import { claimKeys, claims, footnoteId } from "@/lib/claims";
 import {
   advisor,
   licensedStates,
@@ -120,15 +121,21 @@ export function Footer() {
             results are illustrations only and are not an approval or rate quote. Your home secures a
             home equity loan, HELOC or mortgage; not making payments could put your home at risk.
           </p>
-          <p>
-            *Close in as few as 3 days: eligible digital HELOCs only. Funds released after the 3-day
-            right of rescission. Subject to credit and property approval.
-          </p>
-          <p id="fn-jd-power" className="scroll-mt-28">
-            <sup>1</sup> Rocket Mortgage received the highest score in the J.D. Power 2022 – 2023
-            Primary Mortgage Servicer Satisfaction Studies. Visit jdpower.com/awards for more
-            information.
-          </p>
+          <div className="max-w-[80ch]">
+            <h2 className="text-[15px] font-semibold text-ink">Disclosures</h2>
+            {/* Numbered to match the superscript markers next to claims across the site. */}
+            <ol className="mt-2 list-decimal space-y-1 pl-6">
+              {claimKeys.map((key) => (
+                <li
+                  key={key}
+                  id={footnoteId(key)}
+                  className="scroll-mt-28 rounded-[6px] px-1 transition-colors target:bg-navy-tint target:text-ink"
+                >
+                  {claims[key].note}
+                </li>
+              ))}
+            </ol>
+          </div>
           <p>
             Verify licensing at{" "}
             <a

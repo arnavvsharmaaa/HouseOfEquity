@@ -29,7 +29,7 @@ export default function CashOutRefinancePage() {
             monthly payment.
           </p>
         }
-        points={["One loan, one monthly payment", "Fixed or adjustable rates", "We shop 170+ wholesale lenders", "Guidance from a licensed advisor"]}
+        points={["One loan, one monthly payment", "Fixed or adjustable rates", "We shop {{lenders}} wholesale lenders", "Guidance from a licensed advisor"]}
         primary={{ label: "Check my options", href: `${getStartedHref}?goal=refinance` }}
         secondary={<PhoneButton />}
         image={{ alt: "Homeowner signing refinance documents at home", note: "Lifestyle photo to be supplied" }}

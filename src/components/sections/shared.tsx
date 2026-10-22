@@ -1,4 +1,4 @@
-import { BadgeCheck, Building2, Check, IdCard, Map as MapIcon, Plus, Quote } from "lucide-react";
+import { BadgeCheck, Building2, Check, ExternalLink, IdCard, Map as MapIcon, Plus, Quote } from "lucide-react";
 import type { ReactNode } from "react";
 import { EqualHousingIcon } from "@/components/layout/EqualHousingIcon";
 import {
@@ -9,7 +9,8 @@ import {
   Stars,
   cx,
 } from "@/components/ui/primitives";
-import { advisor, getStartedHref, licensedStates, sponsor } from "@/lib/site";
+import { Claim, Fn, PrimaryAction, Rich } from "@/components/ui/Claim";
+import { advisor, getStartedHref, sponsor, zillow } from "@/lib/site";
 
 export function SectionHeading({
   eyebrow,
@@ -30,7 +31,7 @@ export function SectionHeading({
       <h2 id={id} className="text-[32px] leading-tight tracking-tight text-ink sm:text-[40px]">
         {title}
       </h2>
-      {intro && <p className="text-[19px] leading-[30px] text-body">{intro}</p>}
+      {intro && <p className="text-[19px] leading-[30px] text-body">{typeof intro === "string" ? <Rich text={intro} /> : intro}</p>}
     </div>
   );
 }
@@ -42,7 +43,9 @@ export function CheckList({ items, className }: { items: string[]; className?: s
       {items.map((item) => (
         <li key={item} className="flex items-start gap-2.5 text-[17px] text-ink">
           <Check aria-hidden className="mt-1 size-5 shrink-0 text-navy" strokeWidth={2.25} />
-          {item}
+          <span>
+            <Rich text={item} />
+          </span>
         </li>
       ))}
     </ul>
@@ -71,7 +74,10 @@ export function TrustStrip() {
       icon: <MapIcon className="size-5" />,
       content: (
         <>
-          Licensed in <strong className="font-medium text-ink">{licensedStates.length} States</strong>
+          Licensed in{" "}
+          <strong className="font-medium text-ink">
+            <Claim id="states" /> States
+          </strong>
         </>
       ),
     },
@@ -133,9 +139,11 @@ export function StepCards({
           <NumberBadge n={i + 1} tone={i === 1 ? "navy" : "ink"} />
           <h3 className="mb-2 mt-6 text-[22px] font-medium text-ink">
             <span className="sr-only">Step {i + 1}: </span>
-            {step.title}
+            <Rich text={step.title} />
           </h3>
-          <p className="text-[18px] leading-relaxed text-body">{step.body}</p>
+          <p className="text-[18px] leading-relaxed text-body">
+            <Rich text={step.body} />
+          </p>
         </li>
       ))}
     </ol>
@@ -152,15 +160,15 @@ export function Testimonials({
       <Container>
         <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div className="space-y-2">
-            <p className="flex items-center gap-2">
-              <Stars />
-              <span className="text-[17px] font-medium text-ink">5.0 Star Average</span>
-            </p>
+            <ZillowBadge />
             <h2 id="reviews-title" className="text-[32px] tracking-tight text-ink sm:text-[40px]">
               Real people. Real experiences.
             </h2>
           </div>
-          <p className="text-[17px] text-body">Client stories from {licensedStates.length} states</p>
+          <p className="text-[17px] text-body">
+            Client stories from <Claim id="states" /> states
+            <Fn id="testimonials" />
+          </p>
         </div>
         <ul className="grid gap-6 lg:grid-cols-3">
           {items.map((t) => (
@@ -210,7 +218,7 @@ export function FaqList({
                 />
               </summary>
               <p className="border-t border-line/60 px-5 pb-6 pt-4 text-[18px] leading-relaxed text-body sm:px-6">
-                {f.a}
+                <Rich text={f.a} />
               </p>
             </details>
           ))}
@@ -244,9 +252,13 @@ export function FinalCta({
           >
             {title}
           </h2>
-          <p className="mx-auto max-w-xl text-[19px] leading-[30px] text-body">{body}</p>
-          <div className="flex flex-col items-stretch justify-center gap-4 pt-4 sm:flex-row sm:items-center">
-            <ButtonLink href={ctaHref}>{ctaLabel}</ButtonLink>
+          <p className="mx-auto max-w-xl text-[19px] leading-[30px] text-body">
+            <Rich text={body} />
+          </p>
+          <div className="flex flex-col items-stretch justify-center gap-4 pt-4 sm:flex-row sm:items-start">
+            <PrimaryAction align="center">
+              <ButtonLink href={ctaHref}>{ctaLabel}</ButtonLink>
+            </PrimaryAction>
             <PhoneButton />
           </div>
         </div>
@@ -260,6 +272,28 @@ export function VerifiedBadge({ children }: { children: ReactNode }) {
     <p className="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-1.5 text-navy">
       <BadgeCheck aria-hidden className="size-[18px]" />
       <span className="text-[13px] font-semibold uppercase tracking-[0.1em]">{children}</span>
+    </p>
+  );
+}
+
+/**
+ * "5.0 on Zillow · N reviews", linking to Mohamad's Zillow profile.
+ * URL and count are placeholders in site.ts (README → "Before launch: verify").
+ */
+export function ZillowBadge({ className }: { className?: string }) {
+  return (
+    <p className={cx("flex flex-wrap items-center gap-x-2 gap-y-1", className)}>
+      <Stars />
+      <a
+        href={zillow.url}
+        rel="noopener"
+        className="inline-flex min-h-11 items-center gap-1.5 text-[17px] font-medium text-ink underline underline-offset-4 hover:text-navy"
+      >
+        {zillow.rating} on Zillow · {zillow.reviewCount} reviews
+        <ExternalLink aria-hidden className="size-4" />
+        <span className="sr-only">(opens Mohamad Fardous&apos;s Zillow profile)</span>
+      </a>
+      <Fn id="zillow" />
     </p>
   );
 }

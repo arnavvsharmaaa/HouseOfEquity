@@ -11,7 +11,6 @@ import {
   PartyPopper,
   PenLine,
   Shield,
-  ShieldCheck,
   Timer,
   Wallet,
   Wrench,
@@ -22,6 +21,7 @@ import { FaqList, FinalCta, NumberBadge, SectionHeading } from "@/components/sec
 import { CapacityEstimator } from "@/components/tools/CapacityEstimator";
 import { HelocHeroForm } from "@/components/tools/HelocHeroForm";
 import { PaymentEstimator } from "@/components/tools/PaymentEstimator";
+import { Claim, Fn, Rich } from "@/components/ui/Claim";
 import { Container, Eyebrow, IconCircle, ImagePlaceholder, Stars } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -68,22 +68,27 @@ function Hero() {
             <h1 className="text-[40px] font-medium leading-[1.1] tracking-tight text-ink sm:text-[52px] lg:text-[56px]">
               Get the cash you need without leaving home.
             </h1>
+            <p data-keep-rate className="max-w-2xl">
+              <span className="block text-[24px] font-medium leading-snug text-ink">Keep your current mortgage rate.</span>
+              <span className="text-[19px] text-body">
+                A HELOC is a separate line of credit, so you can access your equity without refinancing your
+                first mortgage.
+              </span>
+            </p>
             <ul className="grid gap-3 sm:grid-cols-2">
               {heroPoints.map((point) => (
                 <li key={point} className="flex items-start gap-3 text-[18px] text-body">
                   <span aria-hidden className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-line text-ink">
                     <Check className="size-4" strokeWidth={2.5} />
                   </span>
-                  {point}
+                  <span>
+                    <Rich text={point} />
+                  </span>
                 </li>
               ))}
             </ul>
             <div className="space-y-3 pt-1">
               <HelocHeroForm />
-              <p className="flex items-center gap-2 text-[16px] text-body">
-                <ShieldCheck aria-hidden className="size-5 shrink-0 text-navy" />
-                Talking with us won&apos;t affect your credit.
-              </p>
             </div>
             <ul className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-2">
               <li className="flex items-center gap-3">
@@ -91,13 +96,18 @@ function Hero() {
                   <Shield className="size-5" />
                 </IconCircle>
                 <span>
-                  <span className="block text-[17px] font-semibold text-ink">$30B+ in Equity</span>
+                  <span className="block text-[17px] font-semibold text-ink">
+                    <Claim id="equityVolume" /> in Equity
+                  </span>
                   <span className="text-[15px] text-body">Evaluated via lending network</span>
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Stars />
-                <span className="text-[17px] font-medium text-ink">Top Rated Mortgage Broker</span>
+                <span className="text-[17px] font-medium text-ink">
+                  Top Rated Mortgage Broker
+                  <Fn id="topBroker" />
+                </span>
               </li>
             </ul>
           </div>
@@ -115,7 +125,10 @@ function Hero() {
                     <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-navy">
                       Kitchen Remodel Value
                     </p>
-                    <p className="text-[22px] font-medium text-ink">$85,000 Equity Tapped</p>
+                    <p className="text-[22px] font-medium text-ink">
+                      $85,000 Equity Tapped
+                      <Fn id="example" />
+                    </p>
                   </div>
                   <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-ink text-white">
                     <CookingPot className="size-5" />
@@ -157,10 +170,12 @@ function WhatIsHeloc() {
                     <Icon className="size-6" strokeWidth={1.75} />
                   </IconCircle>
                   <h4 className="text-[22px] font-medium text-ink">{card.title}</h4>
-                  <p className="text-[18px] leading-relaxed text-body">{card.body}</p>
+                  <p className="text-[18px] leading-relaxed text-body">
+                    <Rich text={card.body} />
+                  </p>
                 </div>
                 <p className="mt-6 border-t border-line pt-5 text-[14px] font-semibold uppercase tracking-[0.06em] text-ink">
-                  {card.footer}
+                  <Rich text={card.footer} />
                 </p>
               </li>
             );
@@ -191,9 +206,11 @@ function HowItWorks() {
                   <NumberBadge n={i + 1} />
                   <h3 className="text-[22px] font-medium text-ink">
                     <span className="sr-only">Step {i + 1}: </span>
-                    {step.title}
+                    <Rich text={step.title} />
                   </h3>
-                  <p className="text-[18px] leading-relaxed text-body">{step.body}</p>
+                  <p className="text-[18px] leading-relaxed text-body">
+                    <Rich text={step.body} />
+                  </p>
                 </div>
                 <p className="flex items-center gap-2 text-[16px] font-medium text-ink">
                   <Icon aria-hidden className="size-5 text-navy" />
@@ -230,7 +247,9 @@ function UseCases() {
                   <Icon className="size-6" strokeWidth={1.75} />
                 </IconCircle>
                 <h3 className="text-[22px] font-medium text-ink">{u.title}</h3>
-                <p className="text-[18px] leading-relaxed text-body">{u.body}</p>
+                <p className="text-[18px] leading-relaxed text-body">
+                  <Rich text={u.body} />
+                </p>
               </li>
             );
           })}
@@ -292,7 +311,7 @@ export default function HelocPage() {
       <FinalCta
         eyebrow="Ready to Begin"
         title="Let's see what your home can do for you."
-        body="Connect with an independent advisor and explore rates from 170+ wholesale lenders today."
+        body="Connect with an independent advisor and explore rates from {{lenders}} wholesale lenders today."
         ctaLabel="Check my HELOC options"
         ctaHref={`${getStartedHref}?goal=equity`}
       />

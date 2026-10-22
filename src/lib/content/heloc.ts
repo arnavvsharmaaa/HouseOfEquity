@@ -6,7 +6,7 @@ import type { FinancingGoal } from "@/lib/analytics";
 export const heroPoints = [
   "Apply 100% online",
   "No in-person appraisal when eligible",
-  "Close in as few as 3 days*",
+  "Close in as few as {{closeDays}}",
   "Guidance from a licensed advisor",
 ];
 
@@ -23,8 +23,8 @@ export const qualifyCards = [
   {
     icon: "pie",
     title: "Enough Equity",
-    body: "Typically 80% to 85% combined loan-to-value (CLTV). This leaves a solid cushion in your property while unlocking working liquidity.",
-    footer: "Benchmark: Up to 85% CLTV",
+    body: "Typically 80% to 85% combined loan-to-value (CLTV).{{^helocLimits}} This leaves a solid cushion in your property while unlocking working liquidity.",
+    footer: "Benchmark: Up to 85% CLTV{{^helocLimits}}",
   },
   {
     icon: "payments",
@@ -35,8 +35,8 @@ export const qualifyCards = [
   {
     icon: "verified",
     title: "Payment History",
-    body: "A reliable credit profile, usually 640+ FICO. Higher scores unlock our premier Tier-1 wholesale discount margins.",
-    footer: "640+ Minimum Credit Score",
+    body: "A reliable credit profile, usually 640+ FICO.{{^helocLimits}} Higher scores unlock our premier Tier-1 wholesale discount margins.",
+    footer: "640+ Minimum Credit Score{{^helocLimits}}",
   },
 ] as const;
 
@@ -53,7 +53,7 @@ export const helocSteps = [
   },
   {
     title: "Sign online and close",
-    body: "Remote online notarization lets you sign from your dining table. Close in as few as 3 days, with funds released following rescission.",
+    body: "Remote online notarization lets you sign from your dining table. Close in as few as {{closeDays}}, with funds released following rescission.",
     tag: "Digital E-Signature",
   },
 ];
@@ -67,7 +67,7 @@ export const comparison = {
     },
     {
       feature: "Lender Options",
-      values: ["We shop 170+ wholesale lenders", "Only 1 bank's in-house rules", "Single lender quote"],
+      values: ["We shop {{lenders}} wholesale lenders", "Only 1 bank's in-house rules", "Single lender quote"],
     },
     {
       feature: "Appraisal",
@@ -79,11 +79,11 @@ export const comparison = {
     },
     {
       feature: "Closing Speed",
-      values: ["In as few as 3 days*", "Could take 4 to 8 weeks", "Varies, generally quick"],
+      values: ["In as few as {{closeDays}}", "Could take 4 to 8 weeks{{^marketComparison}}", "Varies, generally quick"],
     },
     {
       feature: "Secured by Home",
-      values: ["Yes (lower tax-deductible* rates)", "Yes", "No (much higher APR 14-30%)"],
+      values: ["Yes (lower tax-deductible{{^tax}} rates)", "Yes", "No (much higher APR 14-30%{{^marketComparison}})"],
     },
   ],
 };
@@ -97,7 +97,7 @@ export const useCases = [
   {
     icon: "card",
     title: "Paying Off Debt",
-    body: "Consolidate 22%+ interest credit cards into a single lower payment with transparent terms.",
+    body: "Consolidate {{cardRates}} interest credit cards into a single lower payment with transparent terms.",
   },
   {
     icon: "school",
@@ -119,7 +119,7 @@ export const useCases = [
 export const helocFaqs = [
   {
     q: "How long does a HELOC take?",
-    a: "With our digital platform, eligible borrowers can complete application and verification in a matter of minutes, achieving closing in as few as 3 business days. Traditional bank options frequently take 4 to 8 weeks.",
+    a: "With our digital platform, eligible borrowers can complete application and verification in a matter of minutes, achieving closing in as few as 3 business days.{{^closeDays}} Traditional bank options frequently take 4 to 8 weeks.{{^marketComparison}}",
   },
   {
     q: "Do I need an in-person appraisal?",

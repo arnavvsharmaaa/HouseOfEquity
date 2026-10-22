@@ -1,3 +1,4 @@
+import { Claim } from "@/components/ui/Claim";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { AdvisorSection, HowItWorksSection, PageHero } from "@/components/sections/blocks";
@@ -6,7 +7,7 @@ import { FinalCta, SectionHeading, Testimonials } from "@/components/sections/sh
 import { Container, PhoneButton } from "@/components/ui/primitives";
 import { testimonials } from "@/lib/content/home";
 import { pageMetadata } from "@/lib/seo";
-import { advisor, getStartedHref, licensedStates, offices, site, sponsor } from "@/lib/site";
+import { advisor, getStartedHref, offices, site, sponsor } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "About Mohamad Fardous & House of Equity",
@@ -16,10 +17,10 @@ export const metadata = pageMetadata({
 });
 
 const stats = [
-  { value: "170+", label: "wholesale lenders shopped" },
-  { value: `${licensedStates.length}`, label: "states licensed" },
-  { value: "10+", label: "years in mortgage finance" },
-];
+  { claim: "lenders", label: "wholesale lenders shopped" },
+  { claim: "states", label: "states licensed" },
+  { claim: "years", label: "years in mortgage finance" },
+] as const;
 
 export default function AboutPage() {
   return (
@@ -47,7 +48,9 @@ export default function AboutPage() {
             {stats.map((s) => (
               <div key={s.label} className="flex flex-col rounded-card border border-line bg-white p-5">
                 <dt className="text-[17px] text-body">{s.label}</dt>
-                <dd className="order-first text-[40px] font-medium leading-tight tracking-tight text-ink">{s.value}</dd>
+                <dd className="order-first text-[40px] font-medium leading-tight tracking-tight text-ink">
+                  <Claim id={s.claim} />
+                </dd>
               </div>
             ))}
           </dl>
@@ -64,7 +67,7 @@ export default function AboutPage() {
             id="offices-title"
             eyebrow="Where We Are"
             title="Offices"
-            intro={`Licensed in ${licensedStates.length} states, with offices in Michigan and California.`}
+            intro="Licensed in {{states}} states, with offices in Michigan and California."
             className="mb-12"
           />
           <ul className="grid gap-6 md:grid-cols-2">

@@ -1,3 +1,4 @@
+import { Claim, Fn } from "@/components/ui/Claim";
 import { Quote } from "lucide-react";
 import { Explainer, OptionCards, PageHero, RelatedLinks, RiskNote } from "@/components/sections/blocks";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
@@ -28,11 +29,12 @@ export default function DebtConsolidationPage() {
         title="Multiple payments? Explore a simpler approach."
         intro={
           <p>
-            Roll multiple high-interest cards (22%+) and personal loans into a single lower interest
-            payment, freeing up hundreds every single month.
+            Roll multiple high-interest cards (<Claim id="cardRates" />) and personal loans into a single
+            lower interest payment, freeing up hundreds every single month.
+            <Fn id="savings" />
           </p>
         }
-        points={["Average monthly savings of $650+", "Simplify finances into one bill", "Guidance from a licensed advisor"]}
+        points={["Average monthly savings of {{savings}}", "Simplify finances into one bill", "Guidance from a licensed advisor"]}
         primary={{ label: "Talk through my debts", href: `${getStartedHref}?goal=debt` }}
         secondary={<PhoneButton />}
         image={{ alt: "Couple sorting household bills at their dining table", note: "Lifestyle photo to be supplied" }}
@@ -93,7 +95,10 @@ export default function DebtConsolidationPage() {
             <blockquote className="text-[22px] leading-relaxed text-ink">&ldquo;{review.quote}&rdquo;</blockquote>
             <figcaption className="border-t border-line pt-4">
               <span className="block text-[18px] font-medium text-ink">{review.name}</span>
-              <span className="text-[16px] text-body">{review.loan}</span>
+              <span className="text-[16px] text-body">
+                {review.loan}
+                <Fn id="testimonials" />
+              </span>
             </figcaption>
           </figure>
         </Container>

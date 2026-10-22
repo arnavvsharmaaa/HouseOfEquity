@@ -1,14 +1,15 @@
+import { claims } from "@/lib/claims";
 import Link from "next/link";
 import {
   ArrowRight,
   Check,
   CreditCard,
   KeyRound,
-  Star,
   Wallet,
   Wrench,
 } from "lucide-react";
-import { AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
+import { AdvisorPresence, AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
+import { Claim, Fn, PrimaryAction, Rich } from "@/components/ui/Claim";
 import { PartnersSection } from "@/components/sections/Partners";
 import { ProductTabs } from "@/components/sections/ProductTabs";
 import {
@@ -19,6 +20,7 @@ import {
   Testimonials,
   TrustStrip,
   VerifiedBadge,
+  ZillowBadge,
 } from "@/components/sections/shared";
 import { EstimateBuilder } from "@/components/tools/EstimateBuilder";
 import {
@@ -28,7 +30,6 @@ import {
   IconCircle,
   ImagePlaceholder,
   PhoneButton,
-  Stars,
 } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -46,7 +47,7 @@ export const metadata = {
   ...pageMetadata({
     title: "Home Equity, HELOC & Mortgage Guidance",
     description:
-      "Your Home. More Possibilities. Personal guidance on HELOCs, home equity loans, refinancing and buying from independent mortgage broker Mohamad Fardous, who shops 170+ wholesale lenders.",
+      `Your Home. More Possibilities. Personal guidance on HELOCs, home equity loans, refinancing and buying from independent mortgage broker Mohamad Fardous, who shops ${claims.lenders.value} wholesale lenders.`,
     path: "/",
   }),
   // The homepage uses the site-level title rather than the "%s | House of Equity" template.
@@ -69,8 +70,9 @@ function Hero() {
             </h1>
             <p className="max-w-xl text-[20px] leading-[32px] text-body">
               Personal guidance on home equity, refinancing, and buying from a real, accessible
-              mortgage advisor who shops 170+ wholesale lenders for you.
+              mortgage advisor who shops <Claim id="lenders" /> wholesale lenders for you.
             </p>
+            <AdvisorPresence />
 
             <div className="pt-2">
               <h2 className="mb-3 text-[17px] font-medium text-ink">
@@ -108,8 +110,10 @@ function Hero() {
               </ul>
             </div>
 
-            <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
-              <ButtonLink href="#estimate">Explore My Options</ButtonLink>
+            <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-start">
+              <PrimaryAction>
+                <ButtonLink href="#estimate">Explore My Options</ButtonLink>
+              </PrimaryAction>
               <PhoneButton
                 label={
                   <span>
@@ -129,20 +133,10 @@ function Hero() {
                 className="aspect-square w-full rounded-tile"
               />
               <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-tile border border-line bg-white/95 p-4 sm:absolute sm:inset-x-6 sm:bottom-6 sm:mt-0 sm:flex-nowrap">
-                <div className="flex items-center gap-3">
-                  <IconCircle className="size-10">
-                    <Star className="size-5" strokeWidth={1.75} />
-                  </IconCircle>
-                  <div>
-                    <p className="flex items-center gap-1.5">
-                      <Stars />
-                      <span className="text-[16px] font-semibold text-ink">5.0</span>
-                    </p>
-                    <p className="text-[15px] text-body">Verified Client Rating on Zillow</p>
-                  </div>
-                </div>
+                <ZillowBadge className="[&_a]:text-[16px]" />
                 <span className="shrink-0 rounded-full border border-line bg-panel px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-navy">
                   Top Broker
+                  <Fn id="topBroker" />
                 </span>
               </div>
             </div>
@@ -163,16 +157,16 @@ function HelocTeaser() {
               Need cash? Try a HELOC.
             </h2>
             <p className="text-[18px] text-body">
-              Borrow against your home&apos;s equity, apply 100% online, and close in as few as 3 days*.
+              Borrow against your home&apos;s equity, apply 100% online, and close in as few as <Claim id="closeDays" />.
             </p>
             <CheckList
               items={["Apply online", "No in-person appraisal when eligible", "Personal guidance"]}
               className="flex flex-wrap gap-x-6 gap-y-1 space-y-0 pt-2 [&_li]:text-[16px] [&_li]:font-medium"
             />
           </div>
-          <ButtonLink href="/heloc" className="w-full shrink-0 md:w-auto">
-            Learn about HELOCs
-          </ButtonLink>
+          <PrimaryAction className="w-full shrink-0 md:w-auto">
+            <ButtonLink href="/heloc">Learn about HELOCs</ButtonLink>
+          </PrimaryAction>
         </div>
       </Container>
     </section>
@@ -216,15 +210,19 @@ function KeepYourRate() {
                     <Check className="size-4" strokeWidth={2.5} />
                   </span>
                   <span>
-                    <span className="block text-[18px] font-medium text-ink">{b.title}</span>
-                    <span className="text-[17px] text-body">{b.body}</span>
+                    <span className="block text-[18px] font-medium text-ink">
+                      <Rich text={b.title} />
+                    </span>
+                    <span className="text-[17px] text-body">
+                      <Rich text={b.body} />
+                    </span>
                   </span>
                 </li>
               ))}
             </ul>
-            <div className="pt-2">
+            <PrimaryAction className="pt-2">
               <ButtonLink href="#estimate">Explore My Equity</ButtonLink>
-            </div>
+            </PrimaryAction>
           </div>
         </div>
       </Container>

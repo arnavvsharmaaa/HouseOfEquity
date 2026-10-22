@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { plain } from "./claims";
 import { advisor, licensedStates, offices, site, sponsor } from "./site";
 
 const defaultShareImage = {
@@ -106,8 +107,8 @@ export function faqJsonLd(faqs: ReadonlyArray<{ q: string; a: string }>) {
     "@type": "FAQPage",
     mainEntity: faqs.map(({ q, a }) => ({
       "@type": "Question",
-      name: q,
-      acceptedAnswer: { "@type": "Answer", text: a },
+      name: plain(q),
+      acceptedAnswer: { "@type": "Answer", text: plain(a) },
     })),
   };
 }

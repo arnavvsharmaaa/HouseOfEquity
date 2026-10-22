@@ -1,3 +1,5 @@
+import { Claim } from "@/components/ui/Claim";
+import { claims } from "@/lib/claims";
 import { HandCoins, Percent, ShieldCheck } from "lucide-react";
 import { OptionCards, PageHero, RateMatchSection, RelatedLinks } from "@/components/sections/blocks";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
@@ -12,7 +14,7 @@ import { getStartedHref } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "Refinance Your Mortgage: Rate, Term or Cash-Out",
   description:
-    "Compare rate-and-term and cash-out refinancing across 170+ wholesale lenders, or keep your low rate with a HELOC. Estimate a new payment and get a second opinion on any offer.",
+    `Compare rate-and-term and cash-out refinancing across ${claims.lenders.value} wholesale lenders, or keep your low rate with a HELOC. Estimate a new payment and get a second opinion on any offer.`,
   path: "/refinance",
 });
 
@@ -25,12 +27,12 @@ export default function RefinancePage() {
         title="Lower your rate, change your term, or take cash out."
         intro={
           <p>
-            Refinancing replaces your current mortgage with a new one. Mohamad shops 170+ wholesale
+            Refinancing replaces your current mortgage with a new one. Mohamad shops <Claim id="lenders" /> wholesale
             lenders to find terms that fit what you want to change, and tells you honestly when
             keeping your current loan is the better choice.
           </p>
         }
-        points={["Rate-and-term refinance", "Cash-out refinance", "We shop 170+ wholesale lenders", "Guidance from a licensed advisor"]}
+        points={["Rate-and-term refinance", "Cash-out refinance", "We shop {{lenders}} wholesale lenders", "Guidance from a licensed advisor"]}
         primary={{ label: "Compare my options", href: `${getStartedHref}?goal=refinance` }}
         secondary={<PhoneButton />}
         image={{ alt: "Homeowner reviewing mortgage paperwork on a laptop at home", note: "Lifestyle photo to be supplied" }}

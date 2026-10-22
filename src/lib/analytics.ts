@@ -13,7 +13,7 @@ type EventMap = {
   financing_goal_select: { goal: FinancingGoal; location: string };
   home_equity_calculator_complete: { calculator: Calculator };
   consultation_request_submit: { form: "contact" | "get_started" | "rate_match"; goal?: FinancingGoal };
-  mortgage_phone_click: { location: string };
+  mortgage_phone_click: { location: string; method: "call" | "text" };
   application_start: { location: string };
 };
 

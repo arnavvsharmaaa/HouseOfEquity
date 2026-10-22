@@ -11,6 +11,7 @@ export const site = {
     display: "949-569-7945",
     href: "tel:+19495697945",
     e164: "+1-949-569-7945",
+    sms: "sms:+19495697945",
   },
 } as const;
 
@@ -78,11 +79,13 @@ export const licensedStates = [
   "Wyoming",
 ] as const;
 
-// Marketing figures used in copy. Listed in README under "Before launch: verify".
-export const claims = {
-  lenders: "170+",
-  states: `${licensedStates.length}`,
-  closeDays: "3",
+// Marketing claims and their disclosures live in ./claims.ts.
+
+/** PLACEHOLDERS: replace with Mohamad's real Zillow profile URL and current review count. */
+export const zillow = {
+  rating: "5.0",
+  reviewCount: "XX",
+  url: "https://www.zillow.com/profile/PLACEHOLDER-mohamad-fardous/",
 } as const;
 
 export const mainNav = [

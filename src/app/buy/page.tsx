@@ -1,3 +1,5 @@
+import { Claim } from "@/components/ui/Claim";
+import { claims } from "@/lib/claims";
 import { BriefcaseBusiness, House, Medal } from "lucide-react";
 import { HowItWorksSection, OptionCards, PageHero, RelatedLinks } from "@/components/sections/blocks";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
@@ -13,7 +15,7 @@ import { getStartedHref } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "Buy a Home: Purchase Loans & Pre-Approval",
   description:
-    "Conventional, FHA, VA, jumbo and self-employed purchase loans with wholesale pricing from 170+ lenders. Estimate your monthly payment and start a pre-approval with Mohamad Fardous.",
+    `Conventional, FHA, VA, jumbo and self-employed purchase loans with wholesale pricing from ${claims.lenders.value} lenders. Estimate your monthly payment and start a pre-approval with Mohamad Fardous.`,
   path: "/buy",
 });
 
@@ -28,11 +30,11 @@ export default function BuyPage() {
         title="Financing That Feels Like Home."
         intro={
           <p>
-            Wholesale pricing with options starting at just 3% down. Fast pre-approvals that make your
+            Wholesale pricing with options starting at just <Claim id="downPayment" /> down. Fast pre-approvals that make your
             offers stand out in competitive markets.
           </p>
         }
-        points={["Options starting at 3% down", "0% down options for military veterans", "Fast pre-approvals", "We shop 170+ wholesale lenders"]}
+        points={["Options starting at {{downPayment}} down", "0% down{{^downPayment}} options for military veterans", "Fast pre-approvals", "We shop {{lenders}} wholesale lenders"]}
         primary={{ label: "Start my pre-approval", href: `${getStartedHref}?goal=buy` }}
         secondary={<PhoneButton />}
         image={{ alt: "Family standing at the front door of their new home", note: "Lifestyle photo to be supplied" }}

@@ -12,6 +12,7 @@ import {
   Network,
   Wallet,
 } from "lucide-react";
+import { Rich } from "@/components/ui/Claim";
 import { IconCircle, cx } from "@/components/ui/primitives";
 import type { ProductCard } from "@/lib/content/home";
 
@@ -33,13 +34,17 @@ function Card({ card }: { card: ProductCard }) {
           <Icon className="size-6" strokeWidth={1.75} />
         </IconCircle>
         <h3 className="text-[22px] font-medium text-ink">{card.title}</h3>
-        <p className="text-[18px] leading-relaxed text-body">{card.body}</p>
+        <p className="text-[18px] leading-relaxed text-body">
+          <Rich text={card.body} />
+        </p>
         {card.points && (
           <ul className="space-y-2 pt-2">
             {card.points.map((p) => (
               <li key={p} className="flex items-center gap-2 text-[17px] text-ink">
                 <CircleCheck aria-hidden className="size-5 shrink-0 text-navy" />
-                {p}
+                <span>
+                  <Rich text={p} />
+                </span>
               </li>
             ))}
           </ul>

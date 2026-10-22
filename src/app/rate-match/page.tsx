@@ -1,3 +1,5 @@
+import { Rich } from "@/components/ui/Claim";
+import { claims } from "@/lib/claims";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { PageHero, RelatedLinks } from "@/components/sections/blocks";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
@@ -11,7 +13,7 @@ import { faqJsonLd, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Rate Match: Get a Second Opinion on Your Loan Offer",
   description:
-    "Already have a Loan Estimate? Send it to independent broker Mohamad Fardous. He'll check 170+ wholesale lenders and either beat it or tell you honestly that it's a good deal. No credit pull.",
+    `Already have a Loan Estimate? Send it to independent broker Mohamad Fardous. He'll check ${claims.lenders.value} wholesale lenders and either beat it or tell you honestly that it's a good deal. No credit pull.`,
   path: "/rate-match",
 });
 
@@ -28,7 +30,7 @@ export default function RateMatchPage() {
             a transparent second opinion from a licensed broker.
           </p>
         }
-        points={["No credit pull needed", "We shop 170+ lenders", "A straight answer, either way", "Upload a PDF or photo"]}
+        points={["No credit pull needed{{^credit}}", "We shop {{lenders}} lenders", "A straight answer, either way", "Upload a PDF or photo"]}
         secondary={<PhoneButton />}
       />
 
@@ -51,8 +53,12 @@ export default function RateMatchPage() {
                     <li key={s.title} className="flex gap-4">
                       <NumberBadge n={i + 1} tone={i === 1 ? "navy" : "ink"} />
                       <div>
-                        <h3 className="text-[19px] font-medium text-ink">{s.title}</h3>
-                        <p className="text-[17px] leading-relaxed text-body">{s.body}</p>
+                        <h3 className="text-[19px] font-medium text-ink">
+                          <Rich text={s.title} />
+                        </h3>
+                        <p className="text-[17px] leading-relaxed text-body">
+                          <Rich text={s.body} />
+                        </p>
                       </div>
                     </li>
                   ))}

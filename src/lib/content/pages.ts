@@ -33,7 +33,7 @@ const designFaq = {
   },
   brokerPay: {
     q: "How does House of Equity get paid as an independent broker?",
-    a: "In almost all cases, our broker fee is paid directly by the wholesale lender you choose—not out of your pocket. By shopping 170+ wholesale lenders, we often beat retail bank pricing even after broker compensation is factored in.",
+    a: "In almost all cases, our broker fee is paid directly by the wholesale lender you choose—not out of your pocket. By shopping {{lenders}} wholesale lenders, we often beat retail bank pricing even after broker compensation is factored in.",
   },
 };
 
@@ -110,7 +110,7 @@ export const buyFaqs = [
   {
     // [new]; percentages are the design's own claims
     q: "How much do I need for a down payment?",
-    a: "It depends on the loan. Conventional options start at 3% down, VA loans offer 0% down for eligible veterans, and FHA loans have flexible credit guidelines for first-time buyers. Mohamad will show you what fits your situation.",
+    a: "It depends on the loan. Conventional options start at {{downPayment}} down, VA loans offer 0% down{{^downPayment}} for eligible veterans, and FHA loans have flexible credit guidelines for first-time buyers. Mohamad will show you what fits your situation.",
   },
   {
     // [new]
@@ -142,7 +142,7 @@ export const programsFaqs = [
   {
     // [new]
     q: "Which loan program is right for me?",
-    a: "Tell Mohamad your goal and your situation. He will compare the programs you qualify for across 170+ wholesale lenders and explain the trade-offs in plain English.",
+    a: "Tell Mohamad your goal and your situation. He will compare the programs you qualify for across {{lenders}} wholesale lenders and explain the trade-offs in plain English.",
   },
   designFaq.brokerPay,
 ];
