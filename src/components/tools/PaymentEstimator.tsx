@@ -5,9 +5,9 @@ import { useId, useState } from "react";
 import { CurrencyField } from "./CurrencyField";
 import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
-import { Fn, PrimaryAction } from "@/components/ui/Claim";
+import { PrimaryAction } from "@/components/ui/Claim";
 import type { Calculator } from "@/lib/analytics";
-import { claims, type ClaimKey } from "@/lib/claims";
+import { claims } from "@/lib/claims";
 import { formatUsd, monthlyPayment } from "@/lib/equity";
 import { getStartedHref } from "@/lib/site";
 
@@ -26,8 +26,6 @@ export type PaymentConfig = {
   /** Prefilled rate as text; "" leaves it for the visitor to enter. */
   defaultRate: string;
   rateHint: string;
-  /** Disclosure for the rate hint, e.g. the example benchmark rate. */
-  rateHintClaim?: ClaimKey;
   amountSummaryLabel: string;
   ctaLabel: string;
   ctaHref: string;
@@ -44,7 +42,6 @@ export const helocPayment: PaymentConfig = {
   defaultTerm: 30,
   defaultRate: claims.benchmarkRate.value,
   rateHint: "Today's standard wholesale benchmark",
-  rateHintClaim: "benchmarkRate",
   amountSummaryLabel: "Selected Line:",
   ctaLabel: "Lock in this estimate",
   ctaHref: `${getStartedHref}?goal=equity`,
@@ -129,7 +126,6 @@ export function PaymentEstimator({ config = helocPayment }: { config?: PaymentCo
             </label>
             <span id={`${rateId}-hint`} className="text-[15px] text-navy">
               {config.rateHint}
-              {config.rateHintClaim && <Fn id={config.rateHintClaim} />}
             </span>
           </div>
           <div className="relative mt-1">
@@ -186,8 +182,6 @@ export function PaymentEstimator({ config = helocPayment }: { config?: PaymentCo
             <dt className="text-white/80">Interest Rate:</dt>
             <dd className="font-semibold">
               {rateValid ? `${rate.toFixed(2)}% APR` : "—"}
-              {/* The prefilled example rate keeps its disclosure until the visitor changes it. */}
-              {config.rateHintClaim && rateText === config.defaultRate && <Fn id={config.rateHintClaim} />}
             </dd>
           </div>
         </dl>

@@ -7,7 +7,7 @@ import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
 import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
-import { Claim, Fn, PrimaryAction } from "@/components/ui/Claim";
+import { Claim, PrimaryAction } from "@/components/ui/Claim";
 import { buttonClass } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
 import { goals, stages, type Stage } from "@/lib/content/home";
@@ -161,7 +161,6 @@ export function EstimateBuilder() {
                 <ShieldCheck aria-hidden className="size-5 shrink-0 text-navy" />
                 <span>
                   No SSN or hard credit pull required
-                  <Fn id="credit" />
                 </span>
               </li>
               <li className="flex items-center gap-2">
@@ -208,7 +207,6 @@ export function EstimateBuilder() {
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-body">
                   Est. Monthly Savings:
-                  <Fn id="savings" />
                 </dt>
                 <dd className="whitespace-nowrap font-medium text-ink">{formatUsd(capacity * 0.0028)} / mo</dd>
               </div>

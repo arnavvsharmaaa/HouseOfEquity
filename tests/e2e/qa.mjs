@@ -445,64 +445,33 @@ async function partners(browser) {
   log("partners", row.every((i) => i.h >= 20 && i.h <= 36) && row.every((i) => i.gray.includes("grayscale")), `partner logo heights ${row.map((i) => i.h).join("/")}px (max 36), grayscale at rest`);
   const band = await section.evaluate((el) => ({ h: Math.round(el.getBoundingClientRect().height), text: el.innerText }));
   log("partners", band.h <= 320 && !band.text.includes("J.D. Power"), `compact band: ${band.h}px tall, J.D. Power note moved out`);
-  const marker = section.getByRole("link", { name: /^Disclosure \d+$/ });
-  // Keyboard path: focus the marker and press Enter (the sticky header can sit over it for a mouse click).
-  await marker.focus();
-  await page.keyboard.press("Enter");
-  await pause(200);
-  const note = await page.evaluate(() => {
-    const el = document.querySelector("#fn-rocket");
-    const r = el?.getBoundingClientRect();
-    return el ? { text: el.innerText, visible: r.top >= 0 && r.bottom <= innerHeight } : null;
-  });
-  log("partners", !!note && note.visible && /J.D. Power 2022 – 2023/.test(note.text) , `Rocket line marker scrolls to its footer disclosure (visible: ${note?.visible})`);
   await page.context().close();
 }
 
-// ---------- claims, footnotes and reassurance on every page ----------
-const FIGURES = /170\+|\b3 days\b|\b\d+ states\b|10\+ years|\b5\.0\b|\$650|22%\+|3% down|0% down|24 hours|\$750,000|\$30B|640\+|85%|10 to 30 years|up to 10 years|8\.15|4 to 8 weeks|14-30%|3 to 7 days|tax-deductible|top broker|top rated/i;
-const CLAIM_EXEMPT = ["/licensing", "/privacy", "/terms"]; // these pages are the disclosures themselves
+// ---------- no footnote markers; disclosures in the footer; reassurance under every CTA ----------
 
 async function claimsCheck(browser) {
   for (const route of ROUTES) {
     const page = await open(browser, route, 1440, 900);
-    const r = await page.evaluate(({ figures, exempt }) => {
-      const list = [...document.querySelectorAll("footer ol > li[id^='fn-']")];
-      const ids = list.map((li) => li.id);
-      // 1. every marker points at the footer entry with the same number
-      const badMarkers = [...document.querySelectorAll("sup[data-fn] a")]
-        .map((a) => ({ n: Number(a.textContent), id: a.getAttribute("href").slice(1) }))
-        .filter((m) => ids.indexOf(m.id) + 1 !== m.n)
-        .map((m) => `${m.n}→#${m.id}`);
-      // 2. every figure in page copy has a marker in the same block (FAQ questions excepted)
-      const unmarked = [];
-      if (!exempt) {
-        const blocks = document.querySelectorAll("main :is(p, li, td, dd, dt, h1, h2, h3, h4, span.block)");
-        for (const el of blocks) {
-          if (el.closest("summary, [aria-hidden=true], .sr-only") || el.querySelector("p, li, td, dd, h3")) continue;
-          const clone = el.cloneNode(true);
-          clone.querySelectorAll("sup, .sr-only").forEach((n) => n.remove());
-          const text = clone.textContent.replace(/\s+/g, " ").trim();
-          const m = text.match(new RegExp(figures, "i"));
-          if (m && !el.querySelector("sup[data-fn]") && !el.closest("li, p, td, dd")?.querySelector("sup[data-fn]")) unmarked.push(`"${m[0]}" in "${text.slice(0, 60)}"`);
-        }
-      }
-      // 3. every primary button in the page body sits in a [data-primary-cta] with the reassurance line
+    const r = await page.evaluate(() => {
+      // Primary buttons in the page body must sit in a [data-primary-cta] with the reassurance line.
       const primaries = [...document.querySelectorAll("main a.bg-ink, main button[type=submit], main .bg-ink a.bg-white")]
         .filter((el) => !el.closest("[data-advisor-presence]") && el.getBoundingClientRect().width > 0);
-      const bare = primaries
-        .filter((el) => !el.closest("[data-primary-cta]")?.querySelector("[data-reassurance]"))
-        .map((el) => el.textContent.trim().slice(0, 30));
-      return { markers: document.querySelectorAll("sup[data-fn]").length, badMarkers, unmarked: [...new Set(unmarked)], primaries: primaries.length, bare, footnotes: ids.length };
-    }, { figures: FIGURES.source, exempt: CLAIM_EXEMPT.includes(route) });
-    const ok = r.badMarkers.length === 0 && r.unmarked.length === 0 && r.bare.length === 0 && r.footnotes > 0;
+      return {
+        sups: document.querySelectorAll("sup").length,
+        disclosures: document.querySelectorAll("footer li[id^='disclosure-']").length,
+        reassurance: [...document.querySelectorAll("[data-reassurance]")].map((p) => p.textContent.trim()),
+        primaries: primaries.length,
+        bare: primaries.filter((el) => !el.closest("[data-primary-cta]")?.querySelector("[data-reassurance]")).map((el) => el.textContent.trim().slice(0, 30)),
+      };
+    });
+    const wording = r.reassurance.every((t) => t === "Won't affect your credit score.");
     log(
       "claims",
-      ok,
-      `${route}: ${r.markers} markers, ${r.primaries} primary CTAs with reassurance` +
-        (r.badMarkers.length ? `; markers not matching footer: ${r.badMarkers.join(", ")}` : "") +
-        (r.unmarked.length ? `; figures without a marker: ${r.unmarked.join(" | ")}` : "") +
-        (r.bare.length ? `; CTAs without reassurance: ${r.bare.join(", ")}` : ""),
+      r.sups === 0 && r.disclosures > 0 && r.bare.length === 0 && wording,
+      `${route}: ${r.sups} superscripts, ${r.disclosures} footer disclosures, ${r.primaries} primary CTAs with "Won't affect your credit score."` +
+        (r.bare.length ? `; CTAs without it: ${r.bare.join(", ")}` : "") +
+        (wording ? "" : `; unexpected wording: ${[...new Set(r.reassurance)].join(" | ")}`),
     );
     await page.context().close();
   }

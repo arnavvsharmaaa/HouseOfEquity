@@ -9,7 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { AdvisorPresence, AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
-import { Claim, Fn, PrimaryAction, Rich } from "@/components/ui/Claim";
+import { Claim, PrimaryAction, Rich } from "@/components/ui/Claim";
 import { PartnersSection } from "@/components/sections/Partners";
 import { ProductTabs } from "@/components/sections/ProductTabs";
 import {
@@ -136,7 +136,6 @@ function Hero() {
                 <ZillowBadge className="[&_a]:text-[16px]" />
                 <span className="shrink-0 rounded-full border border-line bg-panel px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-navy">
                   Top Broker
-                  <Fn id="topBroker" />
                 </span>
               </div>
             </div>

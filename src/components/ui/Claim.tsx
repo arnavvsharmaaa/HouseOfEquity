@@ -1,31 +1,14 @@
 import { Fragment } from "react";
 import { ShieldCheck } from "lucide-react";
-import { claims, footnoteId, footnoteNumber, parseClaims, type ClaimKey } from "@/lib/claims";
+import { claims, parseClaims, type ClaimKey } from "@/lib/claims";
 import { cx } from "./primitives";
 
-/** Superscript footnote marker linking to the numbered disclosure in the footer. */
-export function Fn({ id, className }: { id: ClaimKey; className?: string }) {
-  const n = footnoteNumber(id);
-  return (
-    <sup data-fn={id} className={cx("ml-0.5 text-[0.7em] font-medium leading-none", className)}>
-      <a href={`#${footnoteId(id)}`} aria-label={`Disclosure ${n}`} className="underline underline-offset-2 hover:no-underline">
-        {n}
-      </a>
-    </sup>
-  );
-}
-
-/** A claim's value followed by its marker, e.g. <Claim id="lenders" /> → 170+¹. */
+/** A claim's value from the single source, e.g. <Claim id="lenders" /> → 170+. */
 export function Claim({ id }: { id: ClaimKey }) {
-  return (
-    <>
-      {claims[id].value}
-      <Fn id={id} />
-    </>
-  );
+  return <>{claims[id].value}</>;
 }
 
-/** Renders a content string, turning {{key}} tokens into value + marker. */
+/** Renders a content string, replacing {{key}} tokens with the claim's value. */
 export function Rich({ text }: { text: string }) {
   return (
     <>
@@ -33,10 +16,7 @@ export function Rich({ text }: { text: string }) {
         typeof part === "string" ? (
           <Fragment key={i}>{part}</Fragment>
         ) : (
-          <Fragment key={i}>
-            {part.showValue && claims[part.key].value}
-            <Fn id={part.key} />
-          </Fragment>
+          <Fragment key={i}>{claims[part.key].value}</Fragment>
         ),
       )}
     </>

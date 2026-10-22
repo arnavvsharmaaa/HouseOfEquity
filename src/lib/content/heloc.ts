@@ -23,8 +23,8 @@ export const qualifyCards = [
   {
     icon: "pie",
     title: "Enough Equity",
-    body: "Typically 80% to 85% combined loan-to-value (CLTV).{{^helocLimits}} This leaves a solid cushion in your property while unlocking working liquidity.",
-    footer: "Benchmark: Up to 85% CLTV{{^helocLimits}}",
+    body: "Typically 80% to 85% combined loan-to-value (CLTV). This leaves a solid cushion in your property while unlocking working liquidity.",
+    footer: "Benchmark: Up to 85% CLTV",
   },
   {
     icon: "payments",
@@ -35,8 +35,8 @@ export const qualifyCards = [
   {
     icon: "verified",
     title: "Payment History",
-    body: "A reliable credit profile, usually 640+ FICO.{{^helocLimits}} Higher scores unlock our premier Tier-1 wholesale discount margins.",
-    footer: "640+ Minimum Credit Score{{^helocLimits}}",
+    body: "A reliable credit profile, usually 640+ FICO. Higher scores unlock our premier Tier-1 wholesale discount margins.",
+    footer: "640+ Minimum Credit Score",
   },
 ] as const;
 
@@ -79,11 +79,11 @@ export const comparison = {
     },
     {
       feature: "Closing Speed",
-      values: ["In as few as {{closeDays}}", "Could take 4 to 8 weeks{{^marketComparison}}", "Varies, generally quick"],
+      values: ["In as few as {{closeDays}}", "Could take 4 to 8 weeks", "Varies, generally quick"],
     },
     {
       feature: "Secured by Home",
-      values: ["Yes (lower tax-deductible{{^tax}} rates)", "Yes", "No (much higher APR 14-30%{{^marketComparison}})"],
+      values: ["Yes (lower tax-deductible rates)", "Yes", "No (much higher APR 14-30%)"],
     },
   ],
 };
@@ -119,7 +119,7 @@ export const useCases = [
 export const helocFaqs = [
   {
     q: "How long does a HELOC take?",
-    a: "With our digital platform, eligible borrowers can complete application and verification in a matter of minutes, achieving closing in as few as 3 business days.{{^closeDays}} Traditional bank options frequently take 4 to 8 weeks.{{^marketComparison}}",
+    a: "With our digital platform, eligible borrowers can complete application and verification in a matter of minutes, achieving closing in as few as 3 business days. Traditional bank options frequently take 4 to 8 weeks.",
   },
   {
     q: "Do I need an in-person appraisal?",

@@ -110,7 +110,7 @@ export const buyFaqs = [
   {
     // [new]; percentages are the design's own claims
     q: "How much do I need for a down payment?",
-    a: "It depends on the loan. Conventional options start at {{downPayment}} down, VA loans offer 0% down{{^downPayment}} for eligible veterans, and FHA loans have flexible credit guidelines for first-time buyers. Mohamad will show you what fits your situation.",
+    a: "It depends on the loan. Conventional options start at {{downPayment}} down, VA loans offer 0% down for eligible veterans, and FHA loans have flexible credit guidelines for first-time buyers. Mohamad will show you what fits your situation.",
   },
   {
     // [new]

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Mail, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { EqualHousingIcon } from "./EqualHousingIcon";
-import { claimKeys, claims, footnoteId } from "@/lib/claims";
+import { claimKeys, claims } from "@/lib/claims";
 import {
   advisor,
   licensedStates,
@@ -123,18 +123,13 @@ export function Footer() {
           </p>
           <div className="max-w-[80ch]">
             <h2 className="text-[15px] font-semibold text-ink">Disclosures</h2>
-            {/* Numbered to match the superscript markers next to claims across the site. */}
-            <ol className="mt-2 list-decimal space-y-1 pl-6">
+            <ul className="mt-2 list-disc space-y-1 pl-6">
               {claimKeys.map((key) => (
-                <li
-                  key={key}
-                  id={footnoteId(key)}
-                  className="scroll-mt-28 rounded-[6px] px-1 transition-colors target:bg-navy-tint target:text-ink"
-                >
+                <li key={key} id={`disclosure-${key}`}>
                   {claims[key].note}
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
           <p>
             Verify licensing at{" "}

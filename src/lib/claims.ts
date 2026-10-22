@@ -1,9 +1,8 @@
 // Every marketing claim and figure on the site, with its disclosure. This is the single source:
 // copy references claims by key, so a figure changes everywhere when it changes here.
 //
-// Footnote numbers follow the order of this object, so "170+" is the same footnote on every page.
-// In content strings, write {{key}} to print the claim's value with its footnote marker, or
-// {{^key}} for a marker alone (after a phrase such as "freeing up hundreds every month").
+// In content strings, write {{key}} to print a claim's value. The disclosures are listed in the
+// footer, in the order of this object.
 // Disclosure wording is DRAFT pending compliance review (README → "Before launch: verify").
 
 import { licensedStates, zillow } from "./site";
@@ -101,29 +100,22 @@ export type ClaimKey = keyof typeof claims;
 
 export const claimKeys = Object.keys(claims) as ClaimKey[];
 
-/** Footnote number for a claim (1-based, stable site-wide). */
-export const footnoteNumber = (key: ClaimKey) => claimKeys.indexOf(key) + 1;
+const TOKEN = /\{\{([a-zA-Z0-9]+)\}\}/g;
 
-export const footnoteId = (key: ClaimKey) => `fn-${key}`;
-
-const TOKEN = /\{\{(\^?)([a-zA-Z0-9]+)\}\}/g;
-
-/** Token string → plain text (values only, no markers). For metadata and JSON-LD. */
+/** Token string → plain text. For metadata and JSON-LD. */
 export function plain(text: string): string {
-  return text.replace(TOKEN, (_, markerOnly: string, key: string) =>
-    markerOnly ? "" : (claims[key as ClaimKey]?.value ?? ""),
-  );
+  return text.replace(TOKEN, (_, key: string) => claims[key as ClaimKey]?.value ?? "");
 }
 
-/** Splits a token string into text and claim parts, for rendering with markers. */
-export function parseClaims(text: string): Array<string | { key: ClaimKey; showValue: boolean }> {
-  const parts: Array<string | { key: ClaimKey; showValue: boolean }> = [];
+/** Splits a token string into text and claim parts. */
+export function parseClaims(text: string): Array<string | { key: ClaimKey }> {
+  const parts: Array<string | { key: ClaimKey }> = [];
   let last = 0;
   for (const m of text.matchAll(TOKEN)) {
-    const key = m[2] as ClaimKey;
+    const key = m[1] as ClaimKey;
     if (!(key in claims)) throw new Error(`Unknown claim token "${m[0]}" in: ${text}`);
     if (m.index! > last) parts.push(text.slice(last, m.index));
-    parts.push({ key, showValue: m[1] !== "^" });
+    parts.push({ key });
     last = m.index! + m[0].length;
   }
   if (last < text.length) parts.push(text.slice(last));

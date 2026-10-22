@@ -59,20 +59,20 @@ export const equityProducts: ProductCard[] = [
   {
     title: "HELOC (Line of Credit)",
     body: "Draw cash only when you need it and only pay interest on what you use. Ideal for ongoing renovations or an emergency safety net.",
-    points: ["Draw period up to 10 years{{^loanTerms}}", "Re-borrow as you pay it down"],
+    points: ["Draw period up to 10 years", "Re-borrow as you pay it down"],
     href: "/heloc",
     icon: "tree",
   },
   {
     title: "Fixed Home Equity Loan",
     body: "One lump sum with a fixed, predictable monthly payment that never changes. Perfect for major one-time investments or large expenses.",
-    points: ["Fixed rates from 10 to 30 years{{^loanTerms}}", "Zero prepayment penalties{{^loanTerms}}"],
+    points: ["Fixed rates from 10 to 30 years", "Zero prepayment penalties"],
     href: "/home-equity-loan",
     icon: "payments",
   },
   {
     title: "Debt Consolidation",
-    body: "Roll multiple high-interest cards ({{cardRates}}) and personal loans into a single lower interest payment, freeing up hundreds every single month.{{^savings}}",
+    body: "Roll multiple high-interest cards ({{cardRates}}) and personal loans into a single lower interest payment, freeing up hundreds every single month.",
     points: ["Average monthly savings of {{savings}}", "Simplify finances into one bill"],
     href: "/debt-consolidation",
     icon: "check",
@@ -88,7 +88,7 @@ export const purchaseProducts: ProductCard[] = [
   },
   {
     title: "VA & FHA Financing",
-    body: "0% down{{^downPayment}} options for military veterans and flexible credit guidelines for first-time homebuyers with sponsored lending speed.",
+    body: "0% down options for military veterans and flexible credit guidelines for first-time homebuyers with sponsored lending speed.",
     href: "/buy",
     icon: "medal",
   },
@@ -170,6 +170,6 @@ export const homeFaqs = [
   },
   {
     q: "How can a HELOC close in as few as 3 days?",
-    a: "Our specialized wholesale equity programs utilize automated property valuations (AVMs) and instant digital income verification. When a borrower qualifies for an appraisal waiver, the entire underwriting process takes hours instead of weeks.{{^closeDays}}",
+    a: "Our specialized wholesale equity programs utilize automated property valuations (AVMs) and instant digital income verification. When a borrower qualifies for an appraisal waiver, the entire underwriting process takes hours instead of weeks.",
   },
 ];

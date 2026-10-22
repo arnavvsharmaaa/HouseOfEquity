@@ -34,7 +34,7 @@ export default function HomeEquityLoanPage() {
             major one-time investments or large expenses.
           </p>
         }
-        points={["Fixed rates from 10 to 30 years{{^loanTerms}}", "Zero prepayment penalties{{^loanTerms}}", "Keep your existing first mortgage", "Guidance from a licensed advisor"]}
+        points={["Fixed rates from 10 to 30 years", "Zero prepayment penalties", "Keep your existing first mortgage", "Guidance from a licensed advisor"]}
         primary={{ label: "Check my options", href: `${getStartedHref}?goal=equity` }}
         secondary={<PhoneButton />}
         image={{ alt: "Homeowners reviewing renovation plans at their kitchen table", note: "Lifestyle photo to be supplied" }}

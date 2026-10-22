@@ -34,7 +34,7 @@ export default function BuyPage() {
             offers stand out in competitive markets.
           </p>
         }
-        points={["Options starting at {{downPayment}} down", "0% down{{^downPayment}} options for military veterans", "Fast pre-approvals", "We shop {{lenders}} wholesale lenders"]}
+        points={["Options starting at {{downPayment}} down", "0% down options for military veterans", "Fast pre-approvals", "We shop {{lenders}} wholesale lenders"]}
         primary={{ label: "Start my pre-approval", href: `${getStartedHref}?goal=buy` }}
         secondary={<PhoneButton />}
         image={{ alt: "Family standing at the front door of their new home", note: "Lifestyle photo to be supplied" }}

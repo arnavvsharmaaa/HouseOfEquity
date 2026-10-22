@@ -30,7 +30,7 @@ generated; only `/api/lead` runs on the server.
 
 | Path | What lives there |
 | --- | --- |
-| `src/lib/claims.ts` | **Every marketing claim and figure** with its footer disclosure. Copy writes `{{key}}` (value + footnote marker) or `{{^key}}` (marker only); footnote numbers follow this file's order, so they match on every page. |
+| `src/lib/claims.ts` | **Every marketing claim and figure** with its footer disclosure. Copy writes `{{key}}` to print a value, so every figure is identical site-wide. The disclosures are listed in the footer (no superscript markers on the page). |
 | `src/lib/site.ts` | **Single source of truth**: NMLS/DRE numbers, phone, email, offices, the 22 licensed states, nav. |
 | `src/lib/content/` | Page copy. `home.ts`/`heloc.ts` are verbatim from the designs; `pages.ts` marks each passage `[design]`, `[guide]` or `[new]`. |
 | `src/lib/seo.ts` | Metadata helper (canonical + OG/Twitter + share image) and JSON-LD builders. |
@@ -243,7 +243,7 @@ Plain-English explanations written for these pages, with no new numbers. Mohamad
 
 ### Footnotes, reassurance and hero presence
 - ⚠️ **Zillow profile URL and review count are placeholders**: `zillow.url` (`https://www.zillow.com/profile/PLACEHOLDER-mohamad-fardous/`) and `zillow.reviewCount` (`XX`) in `src/lib/site.ts`. The badge "5.0 on Zillow · XX reviews" appears in the homepage hero card, the homepage and About testimonials headers.
-- ⚠️ **Every numbered footer disclosure is draft wording** written for this preview in `src/lib/claims.ts`; each needs compliance review and, where it states a fact (lender network size, review count, response time), a source.
+- ⚠️ **Every footer disclosure is draft wording** written for this preview in `src/lib/claims.ts`; each needs compliance review and, where it states a fact (lender network size, review count, response time), a source.
 - ⚠️ **"Won't affect your credit score."** now sits under every primary call to action, with a disclosure that only a loan application triggers a hard inquiry. Review it carefully on CTAs such as **"Start my pre-approval"** (`/buy`): a full pre-approval usually involves a hard credit pull, so the line may need different wording there.
 - ⚠️ **"Text Moe"** opens a text message to 949-569-7945: confirm that number accepts texts and that inbound texting is set up for compliant replies.
 - ⚠️ **"Book a call"** goes to the contact form; there is no scheduling tool yet. Add a booking link (e.g. Calendly) if Mohamad uses one.

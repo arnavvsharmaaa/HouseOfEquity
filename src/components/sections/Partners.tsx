@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Fn } from "@/components/ui/Claim";
 import { Container } from "@/components/ui/primitives";
 
 // A quiet trust band under the trust strip. Wording from mfardous.com; the J.D. Power note lives in
@@ -66,7 +65,6 @@ export function PartnersSection() {
             />
             <p className="text-[18px] font-medium leading-snug text-ink lg:text-[17px]">
               Rocket Mortgage&apos;s #1 National Broker Partner, 4&nbsp;years
-              <Fn id="rocket" />
             </p>
           </div>
 

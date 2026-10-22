@@ -9,7 +9,7 @@ import {
   Stars,
   cx,
 } from "@/components/ui/primitives";
-import { Claim, Fn, PrimaryAction, Rich } from "@/components/ui/Claim";
+import { Claim, PrimaryAction, Rich } from "@/components/ui/Claim";
 import { advisor, getStartedHref, sponsor, zillow } from "@/lib/site";
 
 export function SectionHeading({
@@ -167,7 +167,6 @@ export function Testimonials({
           </div>
           <p className="text-[17px] text-body">
             Client stories from <Claim id="states" /> states
-            <Fn id="testimonials" />
           </p>
         </div>
         <ul className="grid gap-6 lg:grid-cols-3">
@@ -293,7 +292,6 @@ export function ZillowBadge({ className }: { className?: string }) {
         <ExternalLink aria-hidden className="size-4" />
         <span className="sr-only">(opens Mohamad Fardous&apos;s Zillow profile)</span>
       </a>
-      <Fn id="zillow" />
     </p>
   );
 }

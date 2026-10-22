@@ -21,7 +21,7 @@ import { FaqList, FinalCta, NumberBadge, SectionHeading } from "@/components/sec
 import { CapacityEstimator } from "@/components/tools/CapacityEstimator";
 import { HelocHeroForm } from "@/components/tools/HelocHeroForm";
 import { PaymentEstimator } from "@/components/tools/PaymentEstimator";
-import { Claim, Fn, Rich } from "@/components/ui/Claim";
+import { Claim, Rich } from "@/components/ui/Claim";
 import { Container, Eyebrow, IconCircle, ImagePlaceholder, Stars } from "@/components/ui/primitives";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -106,7 +106,6 @@ function Hero() {
                 <Stars />
                 <span className="text-[17px] font-medium text-ink">
                   Top Rated Mortgage Broker
-                  <Fn id="topBroker" />
                 </span>
               </li>
             </ul>
@@ -127,7 +126,6 @@ function Hero() {
                     </p>
                     <p className="text-[22px] font-medium text-ink">
                       $85,000 Equity Tapped
-                      <Fn id="example" />
                     </p>
                   </div>
                   <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-ink text-white">

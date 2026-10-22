@@ -30,7 +30,7 @@ export default function RateMatchPage() {
             a transparent second opinion from a licensed broker.
           </p>
         }
-        points={["No credit pull needed{{^credit}}", "We shop {{lenders}} lenders", "A straight answer, either way", "Upload a PDF or photo"]}
+        points={["No credit pull needed", "We shop {{lenders}} lenders", "A straight answer, either way", "Upload a PDF or photo"]}
         secondary={<PhoneButton />}
       />
 
