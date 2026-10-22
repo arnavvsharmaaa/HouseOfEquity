@@ -36,3 +36,17 @@ export function parseUsd(input: string): number {
   const n = Number(input.replace(/[^0-9.]/g, ""));
   return Number.isFinite(n) ? n : 0;
 }
+
+/**
+ * Fully amortizing monthly principal & interest:
+ *   P × r(1+r)^n / ((1+r)^n − 1), with r = APR / 12 and n = years × 12.
+ * A 0% rate falls back to straight-line repayment.
+ */
+export function monthlyPayment(principal: number, aprPercent: number, years: number): number {
+  const n = Math.round(years * 12);
+  if (principal <= 0 || n <= 0) return 0;
+  const r = aprPercent / 100 / 12;
+  if (r <= 0) return principal / n;
+  const growth = Math.pow(1 + r, n);
+  return (principal * r * growth) / (growth - 1);
+}

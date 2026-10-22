@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, ChevronDown, Lock, ShieldCheck } from "lucide-react";
+import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
+import { useReportCalculatorOnce } from "./useReportOnce";
 import { buttonClass } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
 import { goals, stages, type Stage } from "@/lib/content/home";
@@ -17,8 +19,6 @@ const metricTitle: Record<FinancingGoal, string> = {
   buy: "Estimated Available Equity",
   refinance: "Estimated Available Equity",
 };
-
-const cltvOptions = [0.7, 0.75, 0.8, 0.85, 0.9];
 
 /** Where "See My Options" goes. Only the goal category ever appears in the URL. */
 function destinationFor(goal: FinancingGoal, stage: Stage) {
@@ -70,23 +70,16 @@ export function EstimateBuilder() {
 
   const { equity, capacity } = estimateEquity({ homeValue, mortgageBalance, otherLiens, cltv });
 
-  // Fire home_equity_calculator_complete once, after the visitor has adjusted inputs and paused.
-  // No amounts are ever sent.
-  const touched = useRef(false);
-  const reported = useRef(false);
-  useEffect(() => {
-    if (!touched.current || reported.current) return;
-    const t = setTimeout(() => {
-      reported.current = true;
-      track("home_equity_calculator_complete", { calculator: "equity_estimator" });
-    }, 1500);
-    return () => clearTimeout(t);
-  }, [homeValue, mortgageBalance, otherLiens, cltv]);
-
+  const markTouched = useReportCalculatorOnce("equity_estimator", [
+    homeValue,
+    mortgageBalance,
+    otherLiens,
+    cltv,
+  ]);
   const touch =
     <T,>(setter: (v: T) => void) =>
     (v: T) => {
-      touched.current = true;
+      markTouched();
       setter(v);
     };
 
@@ -149,26 +142,7 @@ export function EstimateBuilder() {
               max={500_000}
               step={5_000}
             />
-            <div className="space-y-1">
-              <label htmlFor="cltv" className="block text-[17px] font-medium leading-7 text-ink">
-                Assumed CLTV
-              </label>
-              <select
-                id="cltv"
-                value={cltv}
-                onChange={(e) => touch(setCltv)(Number(e.target.value))}
-                className="min-h-12 w-full rounded-[12px] border border-field bg-white px-4 text-[19px] text-ink"
-              >
-                {cltvOptions.map((o) => (
-                  <option key={o} value={o}>
-                    {Math.round(o * 100)}%{o === DEFAULT_CLTV ? " (typical)" : ""}
-                  </option>
-                ))}
-              </select>
-              <p className="pt-1 text-[15px] leading-snug text-body">
-                Combined loan-to-value: the share of your home&apos;s value all loans may total.
-              </p>
-            </div>
+            <CltvField value={cltv} onChange={touch(setCltv)} />
           </fieldset>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">

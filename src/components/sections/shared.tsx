@@ -221,11 +221,13 @@ export function FaqList({
 }
 
 export function FinalCta({
+  eyebrow = "Good Things Start at Home",
   title = "Let's find the right option for you.",
   body = "No sales pressure. Just honest guidance, personal attention, and wholesale lender rates.",
   ctaLabel = "Get Started",
   ctaHref = getStartedHref,
 }: {
+  eyebrow?: string;
   title?: string;
   body?: string;
   ctaLabel?: string;
@@ -235,7 +237,7 @@ export function FinalCta({
     <section aria-labelledby="final-cta-title" className="py-16 lg:py-24" data-track-location="final_cta">
       <Container>
         <div className="space-y-5 rounded-panel border border-line bg-white px-6 py-12 text-center sm:px-12 sm:py-16">
-          <Eyebrow>Good Things Start at Home</Eyebrow>
+          <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id="final-cta-title"
             className="mx-auto max-w-2xl text-[34px] leading-tight tracking-tight text-ink sm:text-[44px]"

@@ -97,11 +97,47 @@ written approval, or a rewrite before public launch (brand guide §13, "Non-nego
 - ⚠️ **"Is my home at risk?"**: the design answer reassures rather than stating the risk. The guide requires plainly saying the home secures the loan and nonpayment may put it at risk (agreed rewrite pending).
 - ⚠️ **Broker compensation** ("In almost all cases … paid directly by the wholesale lender", "we often beat retail bank pricing").
 
-### HELOC page (next phase; from the HELOC design)
-- ⚠️ **"$30B+ in Equity"**, **"Lines of credit up to $750,000"**: Figure's numbers, not Mohamad's.
-- ⚠️ **"640+ FICO"**, **"Up to 85% CLTV"**, **"Tier-1 wholesale discount margins"**.
-- ⚠️ **"lower tax-deductible\* rates"**: approved alternative is "may be deductible for home improvements; consult a tax professional".
-- ⚠️ Comparison table cells (bank HELOC "4 to 8 weeks", personal loan "14–30% APR").
+### HELOC page (`/heloc`)
+**Hero and trust**
+- ⚠️ **"$30B+ in Equity / Evaluated via lending network"**: Figure's number, not Mohamad's.
+- ⚠️ **"Top Rated Mortgage Broker"** with 5 stars: no source given.
+- ⚠️ **"Kitchen Remodel Value — $85,000 Equity Tapped"** on the photo card: reads as a real client result; label it as an example or remove it.
+- ⚠️ **"Talking with us won't affect your credit."**
+- ⚠️ **"Apply 100% online"**, **"Close in as few as 3 days\*"**, **"No in-person appraisal when eligible"** (same as homepage).
+
+**What you need to qualify**
+- ⚠️ **"Typically 80% to 85% combined loan-to-value" / "Benchmark: Up to 85% CLTV"**.
+- ⚠️ **"usually 640+ FICO" / "640+ Minimum Credit Score"**.
+- ⚠️ **"premier Tier-1 wholesale discount margins"**.
+
+**Capacity estimator**
+- ⚠️ **"Lines of credit up to $750,000 across 170+ wholesale lending channels"**: Figure's limit, not Mohamad's.
+- ⚠️ **"you could qualify to borrow up to"**: wording implies qualification; the estimate is illustrative only (the disclaimer is shown beside it).
+
+**How it works**
+- ⚠️ **"Takes ~5 minutes"**, **"instant automated property valuation (AVM)"**, **"Remote online notarization lets you sign from your dining table"** (RON availability varies by state).
+
+**Payment estimator**
+- ⚠️ **Prefilled rate "8.15%" labeled "Today's standard wholesale benchmark"**: an advertised rate needs a date, APR basis and assumptions (Reg Z / state ad rules), or the field should start empty for the visitor to enter.
+- ⚠️ **"Lock in this estimate"** button: implies a rate lock; it only links to the contact form.
+- ⚠️ The payment is **fully amortizing principal & interest**. Many HELOCs are interest-only during the draw period, so the real payment pattern differs; say so or offer both.
+
+**Comparison table**
+- ⚠️ **"100% online in minutes"**, **"Waived when eligible (digital AVM)"**.
+- ⚠️ Bank HELOC **"Could take 4 to 8 weeks"**, **"Often requires branch visits"**, **"Only 1 bank's in-house rules"**.
+- ⚠️ **"Yes (lower tax-deductible\* rates)"**: approved alternative is "Interest may be deductible for home improvements — consult a tax professional." The asterisk currently has no matching footnote.
+- ⚠️ Personal loan **"much higher APR 14-30%"**: needs a dated source.
+
+**Use cases**
+- ⚠️ **"Consolidate 22%+ interest credit cards into a single lower payment"**.
+- ⚠️ **"Keep a zero-balance revolving line open with no interest until used"**: some HELOCs charge annual or inactivity fees.
+- ⚠️ **"flexible draw periods matching semester schedules"**.
+
+**FAQ**
+- ⚠️ **"closing in as few as 3 business days"** (the footnote says 3 days plus rescission) and **"Traditional bank options frequently take 4 to 8 weeks"**.
+- ⚠️ **"In most instances, no"** in-person appraisal.
+- ⚠️ **"Both options are available through our network"** (variable and fixed-rate draw).
+- ⚠️ **Soft-pull answer** ("does not affect your credit scores").
 
 ### Missing data
 - ⚠️ Irvine office ZIP code (not supplied; omitted from address and JSON-LD).

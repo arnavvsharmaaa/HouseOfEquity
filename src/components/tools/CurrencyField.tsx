@@ -15,6 +15,7 @@ export function CurrencyField({
   max,
   step,
   hint,
+  slider = true,
 }: {
   label: string;
   value: number;
@@ -23,6 +24,8 @@ export function CurrencyField({
   max: number;
   step: number;
   hint?: string;
+  /** Show the paired range slider (default true). */
+  slider?: boolean;
 }) {
   const id = useId();
   const [text, setText] = useState(formatUsd(value));
@@ -63,16 +66,18 @@ export function CurrencyField({
         }}
         className="mt-1 min-h-12 w-full rounded-[12px] border border-field bg-white px-4 text-[19px] font-medium text-ink"
       />
-      <input
-        type="range"
-        aria-label={`${label} slider`}
-        min={min}
-        max={max}
-        step={step}
-        value={Math.min(Math.max(value, min), max)}
-        aria-valuetext={formatUsd(value)}
-        onChange={(e) => onChange(Number(e.target.value))}
-      />
+      {slider && (
+        <input
+          type="range"
+          aria-label={`${label} slider`}
+          min={min}
+          max={max}
+          step={step}
+          value={Math.min(Math.max(value, min), max)}
+          aria-valuetext={formatUsd(value)}
+          onChange={(e) => onChange(Number(e.target.value))}
+        />
+      )}
     </div>
   );
 }
