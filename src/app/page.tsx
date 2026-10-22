@@ -9,7 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { AdvisorPresence, AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
-import { Claim, PrimaryAction, Rich } from "@/components/ui/Claim";
+import { Claim, PrimaryAction, QuoteAction, Rich } from "@/components/ui/Claim";
 import { PartnersSection } from "@/components/sections/Partners";
 import { ProductTabs } from "@/components/sections/ProductTabs";
 import {
@@ -111,9 +111,9 @@ function Hero() {
             </div>
 
             <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-start">
-              <PrimaryAction>
+              <QuoteAction>
                 <ButtonLink href="#estimate">Explore My Options</ButtonLink>
-              </PrimaryAction>
+              </QuoteAction>
               <PhoneButton
                 label={
                   <span>
