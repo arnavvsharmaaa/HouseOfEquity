@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Tokens from the Stitch "Plain Clarity" design system (DESIGN.md). */
+@theme {
+  --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+
+  --color-ink: #1a1a1a; /* headings, primary buttons */
+  --color-ink-hover: #333333;
+  --color-body: #4a4a4a; /* paragraphs */
+  --color-muted: #71717a; /* captions on white only */
+  --color-panel: #f5f5f5; /* section panels */
+  --color-line: #e5e5e5; /* card borders */
+  --color-field: #d1d5db; /* input borders */
+  --color-navy: #1f2a44; /* links, chips, selected state */
+  --color-navy-tint: #eef1f7;
+  --color-navy-line: #d5dde8;
+  --color-star: #e4a025; /* decorative only: always paired with a text rating */
+  --color-error: #ba1a1a;
+
+  --radius-card: 20px;
+  --radius-panel: 24px;
+  --radius-tile: 18px;
+
+  --container-site: 1280px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-white font-sans text-[18px] leading-[1.65] text-ink antialiased;
+  }
+
+  /* One strong, consistent focus ring everywhere (WCAG 2.2 focus appearance). */
+  :focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Native <details> FAQ: hide the default marker. */
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Range inputs: 6px track, 28px thumb per DESIGN.md. */
+  input[type="range"] {
+    @apply h-11 w-full cursor-pointer appearance-none bg-transparent;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    @apply h-1.5 rounded-full bg-line;
+  }
+  input[type="range"]::-moz-range-track {
+    @apply h-1.5 rounded-full bg-line;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    @apply -mt-[11px] size-7 appearance-none rounded-full border-[3px] border-white bg-ink;
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+  input[type="range"]::-moz-range-thumb {
+    @apply size-7 rounded-full border-[3px] border-white bg-ink;
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

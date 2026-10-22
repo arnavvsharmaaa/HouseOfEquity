@@ -1,0 +1,763 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="web_standard" name="shell-type">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #1A1A1A;
+        font-family: 'Inter', sans-serif;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      main > :first-child {
+        margin-top: 0 !important;
+      }
+      main > :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-tint": "#5f5e5e",
+          "tertiary-fixed-dim": "#cac6c4",
+          "surface-container-low": "#f3f3f3",
+          "secondary-fixed-dim": "#bbc6e7",
+          "tertiary-fixed": "#e6e2df",
+          "on-secondary-container": "#56607d",
+          "on-primary-container": "#858383",
+          "primary-fixed-dim": "#c8c6c5",
+          "error": "#ba1a1a",
+          "on-tertiary-container": "#868382",
+          "tertiary-container": "#1c1b1a",
+          "on-secondary-fixed-variant": "#3b4662",
+          "surface-dim": "#dadada",
+          "secondary-fixed": "#d9e2ff",
+          "outline": "#747878",
+          "surface-container-lowest": "#ffffff",
+          "tertiary": "#000000",
+          "secondary": "#535e7b",
+          "on-secondary-fixed": "#0f1b34",
+          "outline-variant": "#c4c7c7",
+          "surface-bright": "#f9f9f9",
+          "surface-container-highest": "#e2e2e2",
+          "on-primary-fixed": "#1c1b1b",
+          "surface-container-high": "#e8e8e8",
+          "on-error-container": "#93000a",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed": "#1c1b1a",
+          "on-surface-variant": "#444748",
+          "secondary-container": "#d1dcfe",
+          "on-primary": "#ffffff",
+          "on-surface": "#1a1c1c",
+          "inverse-primary": "#c8c6c5",
+          "inverse-surface": "#2f3131",
+          "on-tertiary-fixed-variant": "#484645",
+          "on-tertiary": "#ffffff",
+          "background": "#f9f9f9",
+          "surface-variant": "#e2e2e2",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f9",
+          "primary-container": "#1c1b1b",
+          "surface-container": "#eeeeee",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#e5e2e1",
+          "inverse-on-surface": "#f1f1f1",
+          "on-error": "#ffffff",
+          "on-primary-fixed-variant": "#474746",
+          "primary": "#000000",
+          "navy-accent": "#1F2A44",
+          "navy-tint": "#EEF1F7",
+          "navy-tint-border": "#D5DDE8",
+          "near-black": "#1A1A1A",
+          "body-dark": "#4A4A4A",
+          "panel-bg": "#F5F5F5",
+          "panel-border": "#E5E5E5"
+        },
+        "borderRadius": {
+          "DEFAULT": "1rem",
+          "lg": "2rem",
+          "xl": "3rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "gutter": "1.5rem",
+          "gutter-mobile": "1rem",
+          "space-md": "1rem",
+          "margin-mobile": "1.25rem",
+          "space-2xl": "4rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2.5rem",
+          "space-sm": "0.5rem",
+          "margin": "3rem",
+          "space-3xl": "6rem"
+        },
+        "fontFamily": {
+          "sans": ["Inter", "sans-serif"],
+          "headline-md": ["Inter"],
+          "label-sm": ["Inter"],
+          "label-md": ["Inter"],
+          "body-lg": ["Inter"],
+          "label-lg": ["Inter"],
+          "headline-sm": ["Inter"],
+          "body-xl": ["Inter"],
+          "body-md": ["Inter"],
+          "display-mobile": ["Inter"],
+          "headline-lg-mobile": ["Inter"],
+          "display": ["Inter"],
+          "headline-lg": ["Inter"]
+        }
+      }
+    }
+  };
+</script>
+</head>
+<body class="bg-white text-near-black antialiased font-sans">
+<!-- HEADER -->
+<header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-panel-border">
+<div class="h-20 max-w-[1280px] mx-auto px-6 flex items-center justify-between gap-6">
+<a class="flex items-center gap-3 text-left group" data-path="home" href="#">
+<div class="w-10 h-10 rounded-full bg-panel-bg border border-panel-border flex items-center justify-center text-near-black">
+<span class="material-symbols-outlined text-[22px]">meeting_room</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[20px] font-medium text-near-black leading-tight tracking-tight">House of Equity</span>
+<span class="text-[11px] font-semibold text-navy-accent uppercase tracking-widest">Home Equity &amp; Mortgage Financing</span>
+</div>
+</a>
+<nav class="hidden lg:flex items-center gap-6" data-active-classes="text-near-black font-medium">
+<a class="text-[16px] text-body-dark hover:text-near-black transition-colors px-2 py-1" data-path="home-equity" href="#">Home Equity</a>
+<a aria-current="page" class="transition-colors px-2 py-1 text-near-black font-medium" data-path="heloc" href="#">HELOC</a>
+<a class="text-[16px] text-body-dark hover:text-near-black transition-colors px-2 py-1" data-path="buy" href="#">Buy</a>
+<a class="text-[16px] text-body-dark hover:text-near-black transition-colors px-2 py-1" data-path="refinance" href="#">Refinance</a>
+<a class="text-[16px] text-body-dark hover:text-near-black transition-colors px-2 py-1" data-path="rate-match" href="#">Rate Match</a>
+<a class="text-[16px] text-body-dark hover:text-near-black transition-colors px-2 py-1" data-path="about" href="#">About</a>
+</nav>
+<div class="flex items-center gap-5">
+<a class="hidden sm:flex items-center gap-2 text-[15px] font-medium text-body-dark hover:text-near-black transition-colors" href="tel:9495697945">
+<span class="material-symbols-outlined text-navy-accent text-[20px]">call</span>
+<span class="">949-569-7945</span>
+</a>
+<a class="min-h-[48px] px-8 rounded-full bg-near-black text-white text-[15px] font-medium flex items-center justify-center hover:bg-black transition-colors" data-path="get-started" href="#">
+          Get Started
+        </a>
+<div class="w-9 h-9 rounded-full bg-panel-bg border border-panel-border flex items-center justify-center text-body-dark">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full pt-20 bg-white"><div class="flex flex-col w-full">
+<!-- SECTION 1: HERO -->
+<section class="w-full bg-surface-container-lowest py-16 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<!-- Hero Left Column -->
+<div class="lg:col-span-7 flex flex-col space-y-8">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-highest text-on-surface w-fit"><span class="material-symbols-outlined text-[16px]">account_balance</span><span class="font-label-sm text-label-sm uppercase tracking-wider">Home Equity Line of Credit</span></div>
+<h1 class="font-display text-display text-on-surface font-medium leading-tight">
+            Get the cash you need without leaving home.
+          </h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2"><div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0 mt-0.5"><span class="material-symbols-outlined text-on-surface text-[16px] font-bold">check</span></div><span class="font-body-md text-body-md text-on-surface-variant">Apply 100% online</span></div><div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0 mt-0.5"><span class="material-symbols-outlined text-on-surface text-[16px] font-bold">check</span></div><span class="font-body-md text-body-md text-on-surface-variant">No in-person appraisal when eligible</span></div><div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0 mt-0.5"><span class="material-symbols-outlined text-on-surface text-[16px] font-bold">check</span></div><span class="font-body-md text-body-md text-on-surface-variant">Close in as few as 3 days*</span></div><div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0 mt-0.5"><span class="material-symbols-outlined text-on-surface text-[16px] font-bold">check</span></div><span class="font-body-md text-body-md text-on-surface-variant">Guidance from a licensed advisor</span></div></div>
+<!-- Hero Action Inline Group -->
+<div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"><div class="relative flex-1"><label class="absolute -top-2.5 left-4 px-2 bg-surface-container-lowest font-label-sm text-label-sm text-on-surface-variant font-medium" for="heloc-goal">I want to</label><select class="w-full h-[52px] px-4 rounded-full bg-surface-container-highest text-on-surface font-label-lg text-label-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary pr-10" id="heloc-goal"><option value="improvements">Make home improvements</option><option value="debt">Pay off high-interest debt</option><option value="expense">Cover a major expense</option><option value="education">Fund education</option><option value="other">Something else</option></select><span class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-on-surface text-[20px]">expand_more</span></div><button class="h-[52px] px-8 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-surface-container-highest hover:text-on-surface transition-colors shrink-0" type="button">Check my HELOC options</button></div>
+<div class="flex items-center gap-2 pt-1 text-outline">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-md text-label-md">Talking with us won't affect your credit.</span>
+</div>
+<div class="flex flex-wrap items-center gap-8 pt-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">shield</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$30B+ in Equity</span>
+<span class="font-label-sm text-label-sm text-outline">Evaluated via lending network</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex gap-0.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-surface-tint">star</span>
+<span class="material-symbols-outlined text-[16px] text-surface-tint">star</span>
+<span class="material-symbols-outlined text-[16px] text-surface-tint">star</span>
+<span class="material-symbols-outlined text-[16px] text-surface-tint">star</span>
+<span class="material-symbols-outlined text-[16px] text-surface-tint">star</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-medium">Top Rated Mortgage Broker</span>
+</div>
+</div>
+</div>
+<!-- Hero Right Column / Visual -->
+<div class="lg:col-span-5 relative">
+<div class="p-3 bg-surface-container rounded-lg shadow-sm">
+<div class="overflow-hidden rounded-DEFAULT aspect-[4/3] relative">
+<img alt="Warm natural sunlight modern residential kitchen renovation" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XVzQKEk7p5dmWNZu-kDS9uz-2ZKGJ4IVs8JgXTZoa_Ll-cClRQQZOr9UsUfdP8iPLpzDcw6cheBIQtUX3nkoUbidnrSsLcm2f2Gw4A_h_XtvF-xVQVKrE8Jms3PqJ7BLIhDdEMuEMH3LBInO4qczANAWaJ85WFBWEBeBbcylpEfUpiYhG50WOtNEl4R-WahmZvmn94vQpy5tCP-yQqvUadvm8fuvlCssOghCcYPcnrzH1o35qYLJeMw_SQ">
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 p-4 rounded bg-surface-container-lowest/90 backdrop-blur-sm">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Kitchen Remodel Value</span>
+<p class="font-headline-sm text-headline-sm text-on-surface font-medium">$85,000 Equity Tapped</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-white"><span class="material-symbols-outlined text-[20px]">countertops</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: WHAT IS A HELOC -->
+<section class="w-full bg-surface-container-low py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="max-w-3xl mb-16">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Clear Foundations</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium mt-2 mb-6">
+          What is a HELOC?
+        </h2>
+<p class="font-body-xl text-body-xl text-on-surface-variant leading-relaxed">
+          A Home Equity Line of Credit (HELOC) is a revolving line of credit secured by your home. Think of it like a credit card with a much lower interest rate: draw what you need, repay on your schedule, and draw again. You only pay interest on what you actually borrow.
+        </p>
+</div>
+<div class="space-y-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">What you need to qualify</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2"><div class="p-8 rounded-DEFAULT bg-surface-container-lowest flex flex-col justify-between shadow-sm"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-near-black"><span class="material-symbols-outlined text-[24px]">pie_chart</span></div><h4 class="font-headline-sm text-headline-sm text-on-surface font-medium">Enough Equity</h4><p class="font-body-md text-body-md text-on-surface-variant">Typically 80% to 85% combined loan-to-value (CLTV). This leaves a solid cushion in your property while unlocking working liquidity.</p></div><div class="pt-6 mt-6 border-t border-surface-container-high"><span class="font-label-sm text-label-sm text-on-surface font-semibold uppercase">Benchmark: Up to 85% CLTV</span></div></div><div class="p-8 rounded-DEFAULT bg-surface-container-lowest flex flex-col justify-between shadow-sm"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-near-black"><span class="material-symbols-outlined text-[24px]">payments</span></div><h4 class="font-headline-sm text-headline-sm text-on-surface font-medium">Steady Income</h4><p class="font-body-md text-body-md text-on-surface-variant">Verifiable W-2, 1099, retirement distributions, or self-employed cash flow demonstrating ease in making ongoing monthly payments.</p></div><div class="pt-6 mt-6 border-t border-surface-container-high"><span class="font-label-sm text-label-sm text-on-surface font-semibold uppercase">W-2, 1099, or Bank Statements</span></div></div><div class="p-8 rounded-DEFAULT bg-surface-container-lowest flex flex-col justify-between shadow-sm"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-near-black"><span class="material-symbols-outlined text-[24px]">verified</span></div><h4 class="font-headline-sm text-headline-sm text-on-surface font-medium">Payment History</h4><p class="font-body-md text-body-md text-on-surface-variant">A reliable credit profile, usually 640+ FICO. Higher scores unlock our premier Tier-1 wholesale discount margins.</p></div><div class="pt-6 mt-6 border-t border-surface-container-high"><span class="font-label-sm text-label-sm text-on-surface font-semibold uppercase">640+ Minimum Credit Score</span></div></div></div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: BORROWING CALCULATOR -->
+<section class="w-full bg-surface-container-lowest py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="p-8 lg:p-12 rounded-lg bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-2 mb-6 text-secondary">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span class="font-label-md text-label-md font-semibold">Adjust the sliders below to calculate your custom borrowing capacity</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Sliders Left Panel -->
+<div class="lg:col-span-7 space-y-10">
+<!-- Slider 1 -->
+<div class="space-y-4">
+<div class="flex justify-between items-baseline">
+<label class="font-label-lg text-label-lg text-on-surface font-medium" for="home-val-range">Estimated Home Value</label>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold" id="home-val-display">$800,000</span>
+</div>
+<input class="w-full h-2 bg-surface-variant rounded-full appearance-none cursor-pointer accent-primary" id="home-val-range" max="2000000" min="200000" step="10000" type="range" value="800000">
+<div class="flex justify-between font-label-sm text-label-sm text-outline">
+<span class="">$200,000</span>
+<span class="">$2,000,000</span>
+</div>
+</div>
+<!-- Slider 2 -->
+<div class="space-y-4">
+<div class="flex justify-between items-baseline">
+<label class="font-label-lg text-label-lg text-on-surface font-medium" for="mortgage-val-range">Remaining Mortgage Balance</label>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold" id="mortgage-val-display">$550,000</span>
+</div>
+<input class="w-full h-2 bg-surface-variant rounded-full appearance-none cursor-pointer accent-primary" id="mortgage-val-range" max="1500000" min="0" step="5000" type="range" value="550000">
+<div class="flex justify-between font-label-sm text-label-sm text-outline">
+<span class="">$0 (Free &amp; Clear)</span>
+<span class="">$1,500,000</span>
+</div>
+</div>
+<!-- Live Bar Comparison Visualization -->
+<div class="pt-4 grid grid-cols-2 gap-4">
+<div class="p-4 rounded-DEFAULT bg-surface-container-lowest flex flex-col justify-end h-44 relative overflow-hidden">
+<div class="absolute bottom-0 left-0 right-0 bg-near-black transition-all duration-300" id="home-bar" style="height: 80%;"></div>
+<div class="relative z-10 space-y-1">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Max Borrowing Cap (80%)</span>
+<p class="font-headline-sm text-headline-sm text-white font-semibold" id="bar-max-cap">$640,000</p>
+</div>
+</div>
+<div class="p-4 rounded-DEFAULT bg-surface-container-lowest flex flex-col justify-end h-44 relative overflow-hidden">
+<div class="absolute bottom-0 left-0 right-0 bg-surface-variant transition-all duration-300" id="mortgage-bar" style="height: 68.75%;"></div>
+<div class="relative z-10 space-y-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Current Mortgage</span>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold" id="bar-mortgage-amt">$550,000</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Result Card Right Panel -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-8 lg:p-10 rounded-DEFAULT shadow-sm flex flex-col justify-between space-y-8">
+<div class="space-y-3">
+<h3 class="font-headline-md text-headline-md text-on-surface font-medium leading-tight">
+                How much could I borrow with a HELOC?
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Lines of credit up to $750,000 across 170+ wholesale lending channels. You only pay for what you draw.
+              </p>
+</div>
+<div class="py-6 border-y border-surface-container-high space-y-2">
+<span class="font-label-md text-label-md text-outline">In this scenario, you could qualify to borrow up to:</span>
+<div class="font-display text-display text-on-surface font-semibold tracking-tight" id="heloc-qualify-amount">$90,000</div>
+<div class="inline-flex items-center gap-1.5 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="">80% Combined LTV Threshold</span>
+</div>
+</div>
+<div class="space-y-4">
+<button class="w-full h-[52px] rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-surface-container-highest hover:text-on-surface transition-colors flex items-center justify-center gap-2" type="button">
+<span class="">Check my HELOC options</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<p class="font-label-sm text-label-sm text-outline leading-normal text-center">
+                *Illustration only. Based on 80% of your home's value. Not an approval. Actual amounts subject to full review.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: HOW IT WORKS -->
+<section class="w-full bg-surface-container-low py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Effortless Digital Flow</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">How it works</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Three quiet, transparent milestones between you and your line of credit.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8"><div class="p-8 rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between space-y-6"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-near-black text-white flex items-center justify-center font-headline-sm text-headline-sm font-semibold">1</div><h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Apply online in minutes</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">100% digital, simple documentation upload from your computer or smartphone. No stacks of paperwork or office visits.</p></div><div class="flex items-center gap-2 text-on-surface font-label-sm text-label-sm font-medium"><span class="material-symbols-outlined text-[18px]">timer</span><span class="">Takes ~5 minutes</span></div></div><div class="p-8 rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between space-y-6"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-near-black text-white flex items-center justify-center font-headline-sm text-headline-sm font-semibold">2</div><h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Digital Home Valuation</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Home value confirmed digitally, with in-person appraisal waived when eligible through instant automated property valuation (AVM).</p></div><div class="flex items-center gap-2 text-on-surface font-label-sm text-label-sm font-medium"><span class="material-symbols-outlined text-[18px]">domain_verification</span><span class="">Automated Verification</span></div></div><div class="p-8 rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between space-y-6"><div class="space-y-4"><div class="w-12 h-12 rounded-full bg-near-black text-white flex items-center justify-center font-headline-sm text-headline-sm font-semibold">3</div><h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Sign online and close</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Remote online notarization lets you sign from your dining table. Close in as few as 3 days, with funds released following rescission.</p></div><div class="flex items-center gap-2 text-on-surface font-label-sm text-label-sm font-medium"><span class="material-symbols-outlined text-[18px]">draw</span><span class="">Digital E-Signature</span></div></div></div>
+</div>
+</section>
+<!-- SECTION 5: MONTHLY PAYMENT CALCULATOR -->
+<section class="w-full bg-surface-container-lowest py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Budget Planning</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">
+          Estimate your monthly payment
+        </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+          Based on loan amount, repayment term, and interest rate.
+        </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 rounded-lg overflow-hidden shadow-sm">
+<!-- Form Inputs Panel -->
+<div class="lg:col-span-7 bg-surface-container-low p-8 lg:p-12 space-y-8">
+<!-- HELOC Amount Input -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface font-medium block" for="pmt-heloc-amount">HELOC Amount Needed</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface font-headline-sm text-headline-sm">$</span>
+<input class="w-full h-[52px] pl-10 pr-4 rounded-DEFAULT bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm border border-surface-container-high focus:outline-none focus:border-secondary" id="pmt-heloc-amount" step="1000" type="number" value="75000">
+</div>
+</div>
+<!-- Term Selector -->
+<div class="space-y-3">
+<label class="font-label-md text-label-md text-on-surface font-medium block">Repayment Term</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<button class="term-btn h-[48px] rounded-full bg-surface-container-lowest text-on-surface font-label-lg text-label-lg border border-surface-container-high hover:border-secondary transition-all" data-term="10" type="button">10 Years</button>
+<button class="term-btn h-[48px] rounded-full bg-surface-container-lowest text-on-surface font-label-lg text-label-lg border border-surface-container-high hover:border-secondary transition-all" data-term="15" type="button">15 Years</button>
+<button class="term-btn h-[48px] rounded-full bg-surface-container-lowest text-on-surface font-label-lg text-label-lg border border-surface-container-high hover:border-secondary transition-all" data-term="20" type="button">20 Years</button>
+<button class="term-btn active h-[48px] rounded-full bg-near-black text-white font-label-lg text-label-lg transition-all" data-term="30" type="button">30 Years</button>
+</div>
+</div>
+<!-- Interest Rate Input -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface font-medium block" for="pmt-heloc-rate">Interest Rate (APR %)</label>
+<span class="font-label-sm text-label-sm text-secondary">Today's standard wholesale benchmark</span>
+</div>
+<div class="relative">
+<input class="w-full h-[52px] px-4 rounded-DEFAULT bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm border border-surface-container-high focus:outline-none focus:border-secondary" id="pmt-heloc-rate" step="0.05" type="number" value="8.15">
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-headline-sm text-headline-sm">%</span>
+</div>
+</div>
+</div>
+<!-- Result Display Panel (Deep Navy) -->
+<div class="lg:col-span-5 bg-near-black text-white p-8 lg:p-12 flex flex-col justify-between space-y-8"><div class="space-y-4"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline-variant font-semibold">Estimated Monthly Breakdown</span><div class="space-y-1"><div class="font-display text-display font-semibold tracking-tight text-white" id="calc-monthly-result">$558</div><span class="font-label-lg text-label-lg text-outline-variant">Principal &amp; Interest / month</span></div></div><div class="space-y-4 border-t border-outline/30 pt-6"><div class="flex justify-between font-body-md text-body-md"><span class="text-outline-variant">Selected Line:</span><span class="font-semibold text-white" id="summary-line">$75,000</span></div><div class="flex justify-between font-body-md text-body-md"><span class="text-outline-variant">Selected Term:</span><span class="font-semibold text-white" id="summary-term">30 Years</span></div><div class="flex justify-between font-body-md text-body-md"><span class="text-outline-variant">Interest Rate:</span><span class="font-semibold text-white" id="summary-rate">8.15% APR</span></div></div><div class="pt-4 space-y-4"><button class="w-full h-[52px] rounded-full bg-white text-near-black font-label-lg text-label-lg hover:bg-surface-container-high transition-colors font-medium" type="button">Lock in this estimate</button><p class="font-label-sm text-label-sm text-outline-variant leading-relaxed text-center">Estimate only. Your actual rate depends on your credit profile, property evaluation, and lender program.</p></div></div>
+</div>
+</div>
+</section>
+<!-- SECTION 6: HOW A HELOC COMPARES -->
+<section class="w-full bg-surface-container-low py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Side by Side</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">How a HELOC compares</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">See how our independent broker line of credit stacks up against conventional alternatives.</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[700px] bg-surface-container-lowest rounded-DEFAULT overflow-hidden shadow-sm"><thead><tr class="border-b border-surface-container-high"><th class="p-6 font-label-lg text-label-lg text-on-surface font-medium w-1/4">Feature</th><th class="p-6 bg-near-black font-headline-sm text-headline-sm text-white font-semibold w-1/3">House of Equity HELOC</th><th class="p-6 font-label-lg text-label-lg text-on-surface font-medium w-1/5">Traditional Bank HELOC</th><th class="p-6 font-label-lg text-label-lg text-on-surface font-medium w-1/5">Personal Loan</th></tr></thead><tbody class="divide-y divide-surface-container-high"><tr><td class="p-6 font-label-md text-label-md text-on-surface font-medium">Application</td><td class="p-6 bg-surface-container-low text-on-surface font-body-md text-body-md font-semibold">100% online in minutes</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Often requires branch visits</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Varies by lender</td></tr><tr><td class="p-6 font-label-md text-label-md text-on-surface font-medium">Lender Options</td><td class="p-6 bg-surface-container-low text-on-surface font-body-md text-body-md font-semibold">We shop 170+ wholesale lenders</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Only 1 bank's in-house rules</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Single lender quote</td></tr><tr><td class="p-6 font-label-md text-label-md text-on-surface font-medium">Appraisal</td><td class="p-6 bg-surface-container-low text-on-surface font-body-md text-body-md font-semibold">Waived when eligible (digital AVM)</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Usually requires in-person appraisal</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Not needed (unsecured)</td></tr><tr><td class="p-6 font-label-md text-label-md text-on-surface font-medium">Closing Speed</td><td class="p-6 bg-surface-container-low text-on-surface font-body-md text-body-md font-semibold">In as few as 3 days*</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Could take 4 to 8 weeks</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Varies, generally quick</td></tr><tr><td class="p-6 font-label-md text-label-md text-on-surface font-medium">Secured by Home</td><td class="p-6 bg-surface-container-low text-on-surface font-body-md text-body-md font-semibold">Yes (lower tax-deductible* rates)</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">Yes</td><td class="p-6 font-body-md text-body-md text-on-surface-variant">No (much higher APR 14-30%)</td></tr></tbody></table>
+</div>
+</div>
+</section>
+<!-- SECTION 7: WHAT YOU CAN USE IT FOR -->
+<section class="w-full bg-surface-container-lowest py-20 lg:py-24">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="max-w-2xl mb-16 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Flexibility</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">What you can use it for</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">A versatile line of credit designed to support your family's key financial goals.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- 1 -->
+<div class="p-8 rounded-DEFAULT bg-surface-container-low shadow-sm space-y-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">home_repair_service</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Home Improvements</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Finance additions, remodels, or repairs that add long-term property value.
+          </p>
+</div>
+<!-- 2 -->
+<div class="p-8 rounded-DEFAULT bg-surface-container-low shadow-sm space-y-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">credit_card_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Paying Off Debt</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Consolidate 22%+ interest credit cards into a single lower payment with transparent terms.
+          </p>
+</div>
+<!-- 3 -->
+<div class="p-8 rounded-DEFAULT bg-surface-container-low shadow-sm space-y-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Education</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Cover college tuition or vocational degrees with flexible draw periods matching semester schedules.
+          </p>
+</div>
+<!-- 4 -->
+<div class="p-8 rounded-DEFAULT bg-surface-container-low shadow-sm space-y-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">celebration</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Major Expenses</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Handle weddings, family milestones, or medical needs with peace of mind.
+          </p>
+</div>
+<!-- 5 -->
+<div class="p-8 rounded-DEFAULT bg-surface-container-low shadow-sm space-y-4 sm:col-span-2 lg:col-span-1">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">health_and_safety</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-medium">Emergency Savings</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Keep a zero-balance revolving line open with no interest until used, standing by for unforeseen needs.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 8: GENTLE RISK NOTE -->
+<section class="w-full bg-surface-container-low py-16">
+<div class="max-w-[1000px] mx-auto px-6">
+<div class="p-8 sm:p-10 rounded-DEFAULT bg-surface-container-lowest border-l-4 border-primary flex flex-col sm:flex-row items-start gap-6 shadow-sm"><div class="w-12 h-12 rounded-full bg-near-black flex items-center justify-center text-white shrink-0"><span class="material-symbols-outlined text-[26px]">shield_lock</span></div><div class="space-y-2"><h4 class="font-headline-sm text-headline-sm text-on-surface font-medium">A note on borrowing responsibly</h4><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Your home secures a HELOC. Not making payments could put your home at risk. Because we are independent licensed advisors and not an automated call center, Mohamad Fardous will walk you through your total borrowing costs, draw periods, and repayment options before you decide anything.</p></div></div>
+</div>
+</section>
+<!-- SECTION 9: SHORT FAQ -->
+<section class="w-full bg-surface-container-lowest py-20 lg:py-24">
+<div class="max-w-[800px] mx-auto px-6">
+<div class="text-center mb-16 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Answers</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">Frequently Asked Questions</h2>
+</div>
+<div class="space-y-4" id="faq-accordion">
+<!-- FAQ 1 -->
+<div class="faq-item rounded-DEFAULT bg-surface-container-low p-6 transition-colors">
+<button class="faq-trigger w-full flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-medium" type="button">
+<span class="">How long does a HELOC take?</span>
+<span class="material-symbols-outlined text-outline transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden pt-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+            With our digital platform, eligible borrowers can complete application and verification in a matter of minutes, achieving closing in as few as 3 business days. Traditional bank options frequently take 4 to 8 weeks.
+          </div>
+</div>
+<!-- FAQ 2 -->
+<div class="faq-item rounded-DEFAULT bg-surface-container-low p-6 transition-colors">
+<button class="faq-trigger w-full flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-medium" type="button">
+<span class="">Do I need an in-person appraisal?</span>
+<span class="material-symbols-outlined text-outline transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden pt-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+            In most instances, no. When eligible, our wholesale underwriting uses an Automated Valuation Model (AVM) to confirm property value instantly, sparing you the delay, disruption, and cost of an appraiser visiting your residence.
+          </div>
+</div>
+<!-- FAQ 3 -->
+<div class="faq-item rounded-DEFAULT bg-surface-container-low p-6 transition-colors">
+<button class="faq-trigger w-full flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-medium" type="button">
+<span class="">Is a HELOC a fixed or variable interest rate?</span>
+<span class="material-symbols-outlined text-outline transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden pt-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+            Both options are available through our network. You can choose a standard variable line that adjusts with the Prime Rate, or a fixed-rate draw option that locks your interest rate and monthly payment for predictable long-term budgeting.
+          </div>
+</div>
+<!-- FAQ 4 -->
+<div class="faq-item rounded-DEFAULT bg-surface-container-low p-6 transition-colors">
+<button class="faq-trigger w-full flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-medium" type="button">
+<span class="">Will checking my options affect my credit score?</span>
+<span class="material-symbols-outlined text-outline transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden pt-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+            No. Initial eligibility reviews and rate quotes use a soft credit inquiry, which does not affect your credit scores or show as a hard inquiry to other lenders.
+          </div>
+</div>
+<!-- FAQ 5 -->
+<div class="faq-item rounded-DEFAULT bg-surface-container-low p-6 transition-colors">
+<button class="faq-trigger w-full flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-medium" type="button">
+<span class="">What is the difference between a HELOC and a home equity loan?</span>
+<span class="material-symbols-outlined text-outline transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden pt-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+            A home equity loan is disbursed as a lump sum upfront with immediate fixed monthly payments. A HELOC is an open revolving credit line: you only borrow when you want, pay interest exclusively on the balance drawn, and can reuse available funds as you pay them back down.
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 10: CLOSING CALL TO ACTION -->
+<section class="w-full bg-surface-container-low py-20 lg:py-24">
+<div class="max-w-[1000px] mx-auto px-6">
+<div class="p-10 lg:p-16 rounded-lg bg-surface-container-lowest text-center space-y-8 shadow-sm">
+<div class="space-y-4 max-w-xl mx-auto">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Ready to Begin</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-medium">
+            Let's see what your home can do for you.
+          </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+            Connect with an independent advisor and explore rates from 170+ wholesale lenders today.
+          </p>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+<button class="h-[52px] px-8 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-surface-container-highest hover:text-on-surface transition-colors w-full sm:w-auto" type="button">
+            Check my HELOC options
+          </button>
+<a class="h-[52px] px-8 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant font-label-lg text-label-lg hover:bg-surface-container transition-colors flex items-center justify-center gap-2 w-full sm:w-auto" href="tel:9495697945">
+<span class="material-symbols-outlined text-[20px] text-secondary">call</span>
+<span class="">Call 949-569-7945</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 11: FOOTNOTE -->
+<section class="w-full bg-surface-container-lowest py-8 border-t border-surface-container-high">
+<div class="max-w-[1200px] mx-auto px-6 text-center">
+<p class="font-label-sm text-label-sm text-outline leading-relaxed max-w-4xl mx-auto">
+        *Eligible digital HELOCs only. Funds released after the 3-day right of rescission. Subject to credit and property approval. Independent Mortgage Broker Mohamad Fardous (NMLS #1448893) sponsored by West Capital Lending (NMLS #1566096).
+      </p>
+</div>
+</section>
+</div>
+<script>
+  (function() {
+    // 1. HELOC Capacity Interactive Sliders
+    const homeValInput = document.getElementById('home-val-range');
+    const mortgageValInput = document.getElementById('mortgage-val-range');
+    const homeValDisplay = document.getElementById('home-val-display');
+    const mortgageValDisplay = document.getElementById('mortgage-val-display');
+    const helocQualifyAmount = document.getElementById('heloc-qualify-amount');
+    const barMaxCap = document.getElementById('bar-max-cap');
+    const barMortgageAmt = document.getElementById('bar-mortgage-amt');
+    const homeBar = document.getElementById('home-bar');
+    const mortgageBar = document.getElementById('mortgage-bar');
+
+    function updateCapacity() {
+      if (!homeValInput || !mortgageValInput) return;
+      const homeVal = parseFloat(homeValInput.value);
+      let mortgageVal = parseFloat(mortgageValInput.value);
+
+      if (mortgageVal > homeVal) {
+        mortgageVal = homeVal;
+        mortgageValInput.value = homeVal;
+      }
+
+      homeValDisplay.textContent = '$' + Number(homeVal).toLocaleString();
+      mortgageValDisplay.textContent = '$' + Number(mortgageVal).toLocaleString();
+
+      const maxBorrow = homeVal * 0.8;
+      const eligibleEquity = Math.max(0, maxBorrow - mortgageVal);
+
+      helocQualifyAmount.textContent = '$' + Math.round(eligibleEquity).toLocaleString();
+      barMaxCap.textContent = '$' + Math.round(maxBorrow).toLocaleString();
+      barMortgageAmt.textContent = '$' + Math.round(mortgageVal).toLocaleString();
+
+      const homeBarHeight = Math.min(100, Math.max(15, (maxBorrow / homeVal) * 100));
+      const mortBarHeight = Math.min(100, Math.max(15, (mortgageVal / homeVal) * 100));
+      homeBar.style.height = homeBarHeight + '%';
+      mortgageBar.style.height = mortBarHeight + '%';
+    }
+
+    if (homeValInput && mortgageValInput) {
+      homeValInput.addEventListener('input', updateCapacity);
+      mortgageValInput.addEventListener('input', updateCapacity);
+      updateCapacity();
+    }
+
+    // 2. Monthly Payment Calculator
+    const helocAmtInput = document.getElementById('pmt-heloc-amount');
+    const helocRateInput = document.getElementById('pmt-heloc-rate');
+    const calcResult = document.getElementById('calc-monthly-result');
+    const summaryLine = document.getElementById('summary-line');
+    const summaryTerm = document.getElementById('summary-term');
+    const summaryRate = document.getElementById('summary-rate');
+    const termButtons = document.querySelectorAll('.term-btn');
+    let currentTerm = 30;
+
+    function calculatePayment() {
+      if (!helocAmtInput || !helocRateInput || !calcResult) return;
+      const principal = parseFloat(helocAmtInput.value) || 0;
+      const rate = parseFloat(helocRateInput.value) || 0;
+      const monthlyRate = (rate / 100) / 12;
+      const numPayments = currentTerm * 12;
+
+      let payment = 0;
+      if (monthlyRate > 0 && numPayments > 0 && principal > 0) {
+        payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+      } else if (numPayments > 0 && principal > 0) {
+        payment = principal / numPayments;
+      }
+
+      calcResult.textContent = '$' + Math.round(payment).toLocaleString();
+      if (summaryLine) summaryLine.textContent = '$' + Math.round(principal).toLocaleString();
+      if (summaryTerm) summaryTerm.textContent = currentTerm + ' Years';
+      if (summaryRate) summaryRate.textContent = rate.toFixed(2) + '% APR';
+    }
+
+    termButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        termButtons.forEach(b => {
+          b.classList.remove('bg-secondary', 'text-on-secondary');
+          b.classList.add('bg-surface-container-lowest', 'text-on-surface');
+        });
+        this.classList.remove('bg-surface-container-lowest', 'text-on-surface');
+        this.classList.add('bg-secondary', 'text-on-secondary');
+        currentTerm = parseInt(this.getAttribute('data-term'));
+        calculatePayment();
+      });
+    });
+
+    if (helocAmtInput && helocRateInput) {
+      helocAmtInput.addEventListener('input', calculatePayment);
+      helocRateInput.addEventListener('input', calculatePayment);
+      calculatePayment();
+    }
+
+    // 3. FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const trigger = item.querySelector('.faq-trigger');
+      const content = item.querySelector('.faq-content');
+      const icon = item.querySelector('.material-symbols-outlined');
+
+      if (trigger && content) {
+        trigger.addEventListener('click', () => {
+          const isOpen = !content.classList.contains('hidden');
+          faqItems.forEach(otherItem => {
+            const otherContent = otherItem.querySelector('.faq-content');
+            const otherIcon = otherItem.querySelector('.material-symbols-outlined');
+            if (otherContent) otherContent.classList.add('hidden');
+            if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+          });
+
+          if (!isOpen) {
+            content.classList.remove('hidden');
+            if (icon) icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      }
+    });
+  })();
+</script></main>
+<!-- FOOTER -->
+<footer class="w-full bg-panel-bg border-t border-panel-border">
+<div class="max-w-[1280px] mx-auto px-6 py-14">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+<div class="lg:col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-white border border-panel-border flex items-center justify-center text-near-black">
+<span class="material-symbols-outlined text-[19px]">meeting_room</span>
+</div>
+<span class="text-[18px] font-medium text-near-black tracking-tight">House of Equity</span>
+</div>
+<p class="text-[14px] text-body-dark max-w-sm leading-relaxed">
+            Good Things Start at Home. Architectural dignity, transparent lending, and tranquil residential equity solutions.
+          </p>
+<div class="space-y-1.5 text-[14px] text-body-dark pt-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[17px] text-navy-accent">call</span>
+<a class="hover:text-near-black transition-colors" href="tel:9495697945">949-569-7945</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[17px] text-navy-accent">mail</span>
+<a class="hover:text-near-black transition-colors" href="mailto:info@houseofequity.co">info@houseofequity.co</a>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<span class="text-[11px] font-semibold text-navy-accent uppercase tracking-wider">Solutions</span>
+<ul class="space-y-2">
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="home-equity" href="#">Home Equity Loan</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="heloc" href="#">HELOC</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="buy" href="#">Home Purchase</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="refinance" href="#">Refinancing Options</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="rate-match" href="#">Rate Match Guarantee</a></li>
+</ul>
+</div>
+<div class="space-y-3">
+<span class="text-[11px] font-semibold text-navy-accent uppercase tracking-wider">Company</span>
+<ul class="space-y-2">
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="about" href="#">About Us</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="privacy-policy" href="#">Privacy Policy</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="terms-of-service" href="#">Terms of Service</a></li>
+<li class="text-[14px]"><a class="text-body-dark hover:text-near-black transition-colors" data-path="licensing" href="#">State Licensing</a></li>
+</ul>
+</div>
+<div class="space-y-3">
+<span class="text-[11px] font-semibold text-navy-accent uppercase tracking-wider">Offices</span>
+<div class="space-y-2 text-[14px] text-body-dark">
+<div>
+<span class="font-medium text-near-black block">Dearborn, MI</span>
+<span class="">Dearborn Regional Office</span>
+</div>
+<div>
+<span class="font-medium text-near-black block">Irvine, CA</span>
+<span class="">Irvine Capital Center</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-5 rounded-[16px] bg-white border border-panel-border space-y-2 mb-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-navy-accent text-[20px]">roofing</span>
+<span class="text-[12px] font-semibold text-near-black uppercase tracking-wider">Equal Housing Opportunity</span>
+</div>
+<p class="text-[13px] text-body-dark leading-relaxed">
+          Independent Mortgage Broker Mohamad Fardous (NMLS #1448893) sponsored by West Capital Lending (NMLS #1566096). Licensed to originate residential mortgage loans and home equity products in 22 states. All rights reserved. Equal Housing Opportunity.
+        </p>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-body-dark text-[13px]">
+<span class="">© 2024 House of Equity (houseofequity.co). All rights reserved.</span>
+<span class="">NMLS #1448893 • NMLS #1566096</span>
+</div>
+</div>
+</footer>
+
+
+</body></html>
