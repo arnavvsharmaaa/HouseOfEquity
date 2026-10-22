@@ -13,7 +13,14 @@ const CHANNEL = process.env.PW_CHANNEL || "chrome";
 const ONLY = process.env.ONLY?.split(",");
 fs.mkdirSync(OUT, { recursive: true });
 
-export const ROUTES = ["/", "/heloc"];
+export const ROUTES = [
+  "/", "/heloc", "/home-equity-loan", "/cash-out-refinance", "/debt-consolidation", "/buy", "/refinance",
+  "/programs", "/rate-match", "/about", "/contact", "/licensing", "/privacy", "/terms",
+];
+const SERVER_LOG = process.env.SERVER_LOG; // optional: the next start log, to confirm what was forwarded
+let ipCounter = 0;
+// TEST-NET-3 addresses, one per test, so the per-IP rate limit never collides between tests.
+const freshIp = () => `203.0.113.${++ipCounter}`;
 const VIEWPORTS = [[1440, 900], [1366, 768], [768, 1024], [390, 844]];
 
 const results = [];
@@ -21,7 +28,7 @@ const log = (section, ok, msg) => results.push({ section, ok, msg });
 const slug = (route) => (route === "/" ? "home" : route.slice(1).replace(/\//g, "-"));
 
 async function open(browser, route, w, h, opts = {}) {
-  const ctx = await browser.newContext({ viewport: { width: w, height: h }, ...opts });
+  const ctx = await browser.newContext({ viewport: { width: w, height: h }, extraHTTPHeaders: { "x-forwarded-for": freshIp() }, ...opts });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => log("console", false, `${route}: page error ${e.message}`));
   await page.goto(BASE + route, { waitUntil: "load" });
@@ -235,10 +242,199 @@ async function stickyBar(browser) {
   }
 }
 
-const suites = { layout, fit, keyboard, keyboardInteractions, math, routing, stickyBar };
+// ---------- SEO basics on every page ----------
+async function seo(browser) {
+  const titles = new Map();
+  const descriptions = new Map();
+  for (const route of ROUTES) {
+    const page = await open(browser, route, 1440, 900);
+    const r = await page.evaluate(() => {
+      const ld = [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => {
+        try { return JSON.parse(s.textContent); } catch { return { invalid: true }; }
+      });
+      const types = ld.flatMap((d) => (d["@graph"] ? d["@graph"].map((g) => [].concat(g["@type"]).join("/")) : [d["@type"] ?? "INVALID"]));
+      let headingJump = null;
+      let prev = 1;
+      for (const h of document.querySelectorAll("main h1, main h2, main h3, main h4")) {
+        const lvl = Number(h.tagName[1]);
+        if (lvl > prev + 1 && !headingJump) headingJump = `${h.tagName} "${h.textContent.trim().slice(0, 40)}" after h${prev}`;
+        prev = lvl;
+      }
+      return {
+        title: document.title,
+        description: document.querySelector('meta[name="description"]')?.content ?? "",
+        canonical: document.querySelector('link[rel="canonical"]')?.href ?? "",
+        ogImage: document.querySelector('meta[property="og:image"]')?.content ?? "",
+        h1: document.querySelectorAll("h1").length,
+        types,
+        invalidLd: ld.some((d) => d.invalid),
+        hasFaq: document.querySelectorAll("details").length > 0,
+        headingJump,
+      };
+    });
+    const expectedCanonical = `https://houseofequity.co${route === "/" ? "" : route}`;
+    const problems = [];
+    if (r.h1 !== 1) problems.push(`${r.h1} h1 elements`);
+    if (!r.description || r.description.length < 70) problems.push("missing/short meta description");
+    if (r.canonical.replace(/\/$/, "") !== expectedCanonical) problems.push(`canonical ${r.canonical}`);
+    if (!r.ogImage) problems.push("no og:image");
+    if (r.invalidLd) problems.push("invalid JSON-LD");
+    if (!r.types.includes("FinancialService")) problems.push("no FinancialService JSON-LD");
+    if (route !== "/" && !r.types.includes("BreadcrumbList")) problems.push("no BreadcrumbList");
+    if (r.hasFaq && !r.types.includes("FAQPage")) problems.push("FAQ without FAQPage");
+    if (r.headingJump) problems.push(`heading skips a level: ${r.headingJump}`);
+    if (titles.has(r.title)) problems.push(`title duplicates ${titles.get(r.title)}`);
+    if (descriptions.has(r.description)) problems.push(`description duplicates ${descriptions.get(r.description)}`);
+    titles.set(r.title, route);
+    descriptions.set(r.description, route);
+    const shown = r.types.filter((t) => !["Organization", "Person", "FinancialService", "LocalBusiness/FinancialService"].includes(t));
+    log("seo", problems.length === 0, `${route}: "${r.title}"${shown.length ? " + " + shown.join(", ") : ""}${problems.length ? " — " + problems.join("; ") : ""}`);
+    await page.context().close();
+  }
+  const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text();
+  const missing = ROUTES.filter((r) => !sitemap.includes(`<loc>https://houseofequity.co${r === "/" ? "" : r}</loc>`));
+  log("seo", missing.length === 0, `sitemap.xml lists all ${ROUTES.length} pages${missing.length ? "; missing " + missing.join(", ") : ""}`);
+  const robots = await (await fetch(`${BASE}/robots.txt`)).text();
+  log("seo", robots.includes("Sitemap: https://houseofequity.co/sitemap.xml") && robots.includes("Disallow: /api/"), "robots.txt points to the sitemap and disallows /api/");
+  for (const [from, to] of [["/digital-heloc", "/heloc"], ["/dscr", "/programs#dscr"], ["/testimonials", "/about"], ["/state-licensing", "/licensing"], ["/calculators", "/heloc"]]) {
+    const res = await fetch(BASE + from, { redirect: "manual" });
+    const loc = res.headers.get("location") ?? "";
+    log("seo", (res.status === 308 || res.status === 301) && loc.endsWith(to), `permanent redirect ${from} → ${loc} (${res.status})`);
+  }
+}
+
+// ---------- lead forms in the browser ----------
+const pdfBytes = Buffer.from("%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n");
+const serverLog = () => (SERVER_LOG && fs.existsSync(SERVER_LOG) ? fs.readFileSync(SERVER_LOG, "utf8") : "");
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function fillValid(page, { name = "Jane Tester", email = `jane+${Date.now()}@example.com` } = {}) {
+  await page.getByLabel("Your name").fill(name);
+  await page.getByLabel("Phone").fill("(949) 555-0142");
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel(/I agree that Mohamad Fardous/).check();
+  return email;
+}
+
+async function forms(browser) {
+  // Validation: empty submit shows a focused error summary and per-field errors.
+  let page = await open(browser, "/contact", 1440, 900);
+  await page.getByRole("button", { name: "Send My Request" }).click();
+  const alert = page.locator("form").getByRole("alert");
+  await alert.waitFor();
+  const items = await alert.locator("li").allTextContents();
+  await page.waitForFunction(() => document.activeElement?.getAttribute("role") === "alert", null, { timeout: 2000 }).catch(() => {});
+  const focused = await page.evaluate(() => document.activeElement?.getAttribute("role"));
+  const invalid = await page.locator("[aria-invalid=true]").count();
+  log("forms", items.length === 4 && focused === "alert" && invalid === 4, `empty submit → ${items.length} errors listed, summary focused (${focused}), ${invalid} fields marked invalid: ${items.join(" | ")}`);
+  await page.getByLabel("Your name").fill("J");
+  await page.getByLabel("Phone").fill("555-12");
+  await page.getByLabel("Email").fill("jane@");
+  await page.getByRole("button", { name: "Send My Request" }).click();
+  const msgs = (await page.locator("form").getByRole("alert").locator("li").allTextContents()).join(" | ");
+  log("forms", /name/.test(msgs) && /10-digit/.test(msgs) && /valid email/.test(msgs), `bad values → specific messages: ${msgs}`);
+  await page.locator("form").getByRole("alert").getByRole("link").first().click();
+  log("forms", (await page.evaluate(() => document.activeElement?.getAttribute("name"))) === "name", "error summary link moves focus to its field");
+  await page.context().close();
+
+  // Goal prefill from ?goal= and success state; the analytics event carries no personal data.
+  page = await open(browser, "/contact?goal=debt", 1440, 900);
+  const goal = await page.getByLabel("What would you like to do?").inputValue();
+  log("forms", goal === "debt", `/contact?goal=debt preselects goal "${goal}"`);
+  const email = await fillValid(page);
+  await page.getByRole("button", { name: "Send My Request" }).click();
+  const heading = page.getByRole("heading", { name: /Thank you, Jane\. We received your request\./ });
+  await heading.waitFor({ timeout: 10000 });
+  await pause(100);
+  const headingFocused = await heading.evaluate((h) => document.activeElement === h);
+  const events = await page.evaluate(() => JSON.stringify(window.dataLayer ?? []));
+  const leaked = ["Jane", email, "9495550142", "555-0142"].filter((v) => events.includes(v));
+  log("forms", headingFocused, "valid submit → success message shown and focused");
+  log("forms", events.includes("consultation_request_submit") && leaked.length === 0, `consultation_request_submit tracked with no personal data${leaked.length ? " — LEAKED " + leaked.join(", ") : ""}`);
+  if (SERVER_LOG) {
+    await pause(300);
+    const log1 = serverLog();
+    log("forms", log1.includes(email) && log1.includes("get_started") && log1.includes("'debt'"), "payload logged locally (no webhook set) with formType get_started and goal debt");
+  }
+  await page.context().close();
+
+  // Honeypot: bots that fill the hidden field get a quiet success; nothing is logged or forwarded.
+  page = await open(browser, "/contact", 1440, 900);
+  const botEmail = await fillValid(page, { name: "Bot Account" });
+  await page.locator('input[name="company"]').evaluate((el) => { el.value = "Acme Spam"; });
+  await page.getByRole("button", { name: "Send My Request" }).click();
+  await page.getByRole("heading", { name: /Thank you/ }).waitFor();
+  await pause(300);
+  log("forms", !SERVER_LOG || !serverLog().includes(botEmail), `honeypot filled → visitor sees success, lead ${SERVER_LOG ? "not logged or forwarded" : "(server log not checked)"}`);
+  await page.context().close();
+
+  // Rate Match uploads.
+  page = await open(browser, "/rate-match", 1440, 900);
+  const fileInput = page.locator('input[type="file"]');
+  await fileInput.setInputFiles({ name: "huge.pdf", mimeType: "application/pdf", buffer: Buffer.alloc(10 * 1024 * 1024 + 1, 0x25) });
+  const sizeError = await page.getByText("larger than 10 MB").first().isVisible();
+  await page.getByRole("button", { name: /Remove/ }).click();
+  await fileInput.setInputFiles({ name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("hello") });
+  const typeError = await page.getByText("Please upload a PDF or a photo").first().isVisible();
+  await page.getByRole("button", { name: /Remove/ }).click();
+  log("forms", sizeError && typeError, `upload: 10 MB + 1 byte rejected (${sizeError}), .txt rejected (${typeError}) before sending`);
+  await fileInput.setInputFiles({ name: "loan-estimate.pdf", mimeType: "application/pdf", buffer: pdfBytes });
+  const shown = await page.getByText("loan-estimate.pdf", { exact: true }).first().isVisible();
+  const rmEmail = await fillValid(page, { name: "Rita Match" });
+  await page.getByRole("button", { name: "Submit My Offer for Review" }).click();
+  await page.getByRole("heading", { name: /Thank you, Rita/ }).waitFor({ timeout: 10000 });
+  await pause(300);
+  const fileLogged = !SERVER_LOG || (serverLog().includes(rmEmail) && serverLog().includes("loan-estimate.pdf"));
+  log("forms", shown && fileLogged, `valid PDF shown as "loan-estimate.pdf" and sent with the lead (in server log: ${fileLogged})`);
+  await page.context().close();
+}
+
+// ---------- /api/lead directly ----------
+async function api() {
+  const base = { name: "Api Tester", phone: "9495550100", email: "api@example.com", goal: "refinance", consent: "on", formType: "rate_match", source: "/rate-match" };
+  const post = (fields, file, ip = freshIp()) => {
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(fields)) fd.set(k, v);
+    if (file) fd.set("file", new Blob([file.bytes], { type: file.type }), file.name);
+    return fetch(`${BASE}/api/lead`, { method: "POST", body: fd, headers: { "x-forwarded-for": ip } });
+  };
+  let res = await post(base);
+  log("api", res.status === 200 && (await res.json()).ok, `valid lead → ${res.status}`);
+  res = await post({ ...base, consent: "" });
+  let body = await res.json();
+  log("api", res.status === 400 && !!body.errors?.consent, `missing consent → ${res.status}`);
+  res = await post({ ...base, email: "nope", phone: "12" });
+  body = await res.json();
+  log("api", res.status === 400 && !!body.errors?.email && !!body.errors?.phone, `bad email + phone → ${res.status} (${Object.keys(body.errors ?? {}).join(", ")})`);
+  res = await post(base, { name: "fake.pdf", type: "application/pdf", bytes: Buffer.from("not really a pdf") });
+  body = await res.json();
+  log("api", res.status === 400 && /doesn't look like/.test(body.errors?.file ?? ""), `PDF with the wrong contents → ${res.status}`);
+  res = await post(base, { name: "big.pdf", type: "application/pdf", bytes: Buffer.concat([pdfBytes, Buffer.alloc(10 * 1024 * 1024)]) });
+  log("api", res.status === 413 || res.status === 400, `file over 10 MB → ${res.status}`);
+  res = await post({ ...base, formType: "contact" }, { name: "ok.pdf", type: "application/pdf", bytes: pdfBytes });
+  body = await res.json();
+  log("api", res.status === 400 && !!body.errors?.file, `file sent with the contact form → ${res.status}`);
+  res = await post({ ...base, company: "spam" });
+  log("api", res.status === 200, `honeypot → quiet ${res.status}`);
+  const ip = freshIp();
+  const statuses = [];
+  for (let i = 0; i < 7; i++) statuses.push((await post(base, null, ip)).status);
+  log("api", statuses.slice(0, 5).every((s) => s === 200) && statuses[5] === 429, `rate limit, same IP ×7 → ${statuses.join(", ")}`);
+  res = await fetch(`${BASE}/api/lead`);
+  log("api", res.status === 405, `GET /api/lead → ${res.status}`);
+}
+
+const suites = { layout, fit, seo, keyboard, keyboardInteractions, math, routing, stickyBar, forms, api };
 const browser = await chromium.launch({ channel: CHANNEL, headless: process.env.PW_HEADLESS !== "false" });
 try {
-  for (const [name, fn] of Object.entries(suites)) if (!ONLY || ONLY.includes(name)) await fn(browser);
+  for (const [name, fn] of Object.entries(suites)) {
+    if (ONLY && !ONLY.includes(name)) continue;
+    try {
+      await fn(browser);
+    } catch (err) {
+      log(name, false, `suite crashed: ${String(err.message).split(/\r?\n/)[0]}`);
+    }
+  }
 } finally {
   await browser.close();
 }

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { track } from "@/lib/analytics";
+import { track, type Calculator } from "@/lib/analytics";
 
 /**
  * Fires home_equity_calculator_complete once, after the visitor has changed an input and
  * paused for a moment. Call `markTouched()` from input handlers. No amounts are ever sent.
  */
 export function useReportCalculatorOnce(
-  calculator: "equity_estimator" | "heloc_payment",
+  calculator: Calculator,
   deps: readonly unknown[],
 ) {
   const touched = useRef(false);

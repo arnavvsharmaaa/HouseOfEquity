@@ -104,7 +104,7 @@ export function NumberBadge({ n, tone = "ink" }: { n: number; tone?: "ink" | "na
     <span
       aria-hidden
       className={cx(
-        "flex size-10 items-center justify-center rounded-full text-[17px] font-medium text-white",
+        "flex size-10 shrink-0 items-center justify-center rounded-full text-[17px] font-medium text-white",
         tone === "navy" ? "bg-navy" : "bg-ink",
       )}
     >

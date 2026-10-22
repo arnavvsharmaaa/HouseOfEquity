@@ -1,23 +1,20 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  CalendarDays,
   Check,
   CreditCard,
-  FileUp,
   KeyRound,
-  Quote,
   Star,
   Wallet,
   Wrench,
 } from "lucide-react";
+import { AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
 import { ProductTabs } from "@/components/sections/ProductTabs";
 import {
   CheckList,
   FaqList,
   FinalCta,
   SectionHeading,
-  StepCards,
   Testimonials,
   TrustStrip,
   VerifiedBadge,
@@ -38,13 +35,11 @@ import {
   equityProducts,
   heroPaths,
   homeFaqs,
-  howItWorks,
   purchaseProducts,
-  rateMatchSteps,
   testimonials,
 } from "@/lib/content/home";
 import { faqJsonLd, pageMetadata } from "@/lib/seo";
-import { advisor, licensedStates, site, sponsor } from "@/lib/site";
+import { advisor, site } from "@/lib/site";
 
 export const metadata = {
   ...pageMetadata({
@@ -270,112 +265,6 @@ function Products() {
   );
 }
 
-function RateMatch() {
-  return (
-    <section aria-labelledby="rate-match-title" className="border-y border-line bg-panel py-16 lg:py-24">
-      <Container>
-        <div className="rounded-panel border border-line bg-white p-6 sm:p-12 lg:p-16">
-          <SectionHeading
-            id="rate-match-title"
-            eyebrow="Wholesale Transparency"
-            title="Already have an offer? Send it to us."
-            intro="We'll beat it or tell you honestly that it's a good deal. Zero sales pressure, just a transparent second opinion from a licensed broker."
-            className="mb-12 max-w-3xl"
-          />
-          <div className="mb-12">
-            <StepCards steps={rateMatchSteps} />
-          </div>
-          <div className="text-center">
-            <ButtonLink href="/rate-match">
-              <FileUp aria-hidden className="size-5" />
-              Submit My Offer for Review
-            </ButtonLink>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-function MeetMohamad() {
-  return (
-    <section id="advisor" aria-labelledby="advisor-title" className="py-16 lg:py-24" data-track-location="advisor">
-      <Container>
-        <div className="grid items-center gap-10 rounded-panel border border-line bg-panel p-6 sm:p-12 lg:grid-cols-12 lg:gap-14 lg:p-16">
-          <div className="lg:col-span-5">
-            <div className="space-y-4 rounded-card border border-line bg-white p-6">
-              <div className="relative overflow-hidden rounded-[16px]">
-                <ImagePlaceholder
-                  alt={`Professional portrait of mortgage advisor ${advisor.name}`}
-                  note="Real portrait to be supplied (no AI images)"
-                  className="aspect-[4/5] w-full rounded-[16px]"
-                />
-                <p className="absolute bottom-3 left-3 rounded-full bg-ink px-3 py-1 text-[14px] font-medium text-white">
-                  NMLS #{advisor.nmls}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[22px] font-medium text-ink">{advisor.name}</p>
-                <p className="text-[17px] text-body">{advisor.title}</p>
-                <p className="text-[16px] font-medium text-navy">
-                  Sponsored by {sponsor.shortName} (NMLS #{sponsor.nmls})
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6 lg:col-span-7">
-            <Eyebrow>Personal Accountability</Eyebrow>
-            <h2 id="advisor-title" className="text-[32px] leading-tight tracking-tight text-ink sm:text-[40px]">
-              Big-lender options. <br />
-              <span className="font-medium">Personal guidance.</span>
-            </h2>
-            <p className="text-[19px] leading-[30px] text-body">
-              {advisor.name} is an independent mortgage broker licensed to originate residential
-              mortgage loans and home equity products in {licensedStates.length} states. As a former
-              Director of Finance at one of the nation&apos;s largest mortgage lenders, Mohamad now
-              works directly for homeowners—shopping wholesale rates across 170+ lenders to find you
-              the best loan.
-            </p>
-            <figure className="space-y-2 rounded-tile border border-l-4 border-line border-l-ink bg-white p-6">
-              <Quote aria-hidden className="size-7 text-navy" />
-              <blockquote className="text-[19px] italic leading-relaxed text-ink">
-                &ldquo;If another lender has the best deal for your situation, I will tell you. If I
-                can beat it, I will.&rdquo;
-              </blockquote>
-              <figcaption className="text-[16px] font-semibold text-navy">— {advisor.name}</figcaption>
-            </figure>
-            <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
-              <ButtonLink href="/contact?goal=equity">
-                <CalendarDays aria-hidden className="size-5" />
-                Schedule a Call
-              </ButtonLink>
-              <PhoneButton />
-            </div>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-function HowItWorks() {
-  return (
-    <section aria-labelledby="how-title" className="py-16 lg:py-24">
-      <Container>
-        <SectionHeading
-          id="how-title"
-          eyebrow="Simple, Dignified Process"
-          title="How it works"
-          intro="No endless paperwork, no retail delays. Three calm, straightforward steps."
-          className="mb-14"
-        />
-        <StepCards steps={howItWorks} />
-      </Container>
-    </section>
-  );
-}
-
 export default function HomePage() {
   return (
     <>
@@ -385,10 +274,10 @@ export default function HomePage() {
       <KeepYourRate />
       <Estimate />
       <Products />
-      <RateMatch />
-      <MeetMohamad />
+      <RateMatchSection />
+      <AdvisorSection />
       <Testimonials items={testimonials} />
-      <HowItWorks />
+      <HowItWorksSection />
       <FaqList faqs={homeFaqs} />
       <FinalCta />
       <JsonLd data={faqJsonLd(homeFaqs)} />

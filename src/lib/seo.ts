@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { advisor, licensedStates, offices, site, sponsor } from "./site";
 
+const defaultShareImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: `${site.name}: Your Home. More Possibilities.`,
+};
+
 /** Per-page metadata with canonical URL and matching Open Graph / Twitter fields. */
 export function pageMetadata({
   title,
@@ -15,8 +22,10 @@ export function pageMetadata({
     title,
     description,
     alternates: { canonical: path },
-    openGraph: { title, description, url: path },
-    twitter: { title, description },
+    // A page-level openGraph object replaces the inherited one, so the default share image
+    // (app/opengraph-image.tsx) must be listed again here.
+    openGraph: { title, description, url: path, images: [defaultShareImage] },
+    twitter: { title, description, images: [defaultShareImage.url] },
   };
 }
 

@@ -3,7 +3,7 @@
 
 import type { FinancingGoal } from "@/lib/analytics";
 
-export const goals: ReadonlyArray<{ value: FinancingGoal; label: string; href: string }> = [
+export const goals: ReadonlyArray<{ value: Exclude<FinancingGoal, "other">; label: string; href: string }> = [
   { value: "equity", label: "access my equity", href: "/home-equity-loan" },
   { value: "debt", label: "consolidate debt", href: "/debt-consolidation" },
   { value: "renovation", label: "renovate my home", href: "/heloc" },

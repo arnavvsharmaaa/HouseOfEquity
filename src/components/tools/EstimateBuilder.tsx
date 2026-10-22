@@ -13,7 +13,9 @@ import { goals, stages, type Stage } from "@/lib/content/home";
 import { DEFAULT_CLTV, estimateEquity, formatUsd } from "@/lib/equity";
 import { advisor, getStartedHref } from "@/lib/site";
 
-const metricTitle: Record<FinancingGoal, string> = {
+type SentenceGoal = Exclude<FinancingGoal, "other">;
+
+const metricTitle: Record<SentenceGoal, string> = {
   equity: "Estimated Available Equity",
   debt: "Available to Consolidate Debt",
   renovation: "Available Renovation Funds",
@@ -22,7 +24,7 @@ const metricTitle: Record<FinancingGoal, string> = {
 };
 
 /** Where "See My Options" goes. Only the goal category ever appears in the URL. */
-function destinationFor(goal: FinancingGoal, stage: Stage) {
+function destinationFor(goal: SentenceGoal, stage: Stage) {
   if (stage === "comparing") return "/rate-match";
   if (stage === "ready") return `${getStartedHref}?goal=${goal}`;
   return goals.find((g) => g.value === goal)?.href ?? "/";
@@ -62,7 +64,7 @@ function InlineSelect<T extends string>({
 }
 
 export function EstimateBuilder() {
-  const [goal, setGoal] = useState<FinancingGoal>("equity");
+  const [goal, setGoal] = useState<SentenceGoal>("equity");
   const [stage, setStage] = useState<Stage>("researching");
   const [homeValue, setHomeValue] = useState(550_000);
   const [mortgageBalance, setMortgageBalance] = useState(250_000);

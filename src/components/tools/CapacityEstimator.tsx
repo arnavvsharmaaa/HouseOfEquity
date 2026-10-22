@@ -13,7 +13,27 @@ import { getStartedHref } from "@/lib/site";
 
 const pct = (part: number, whole: number) => (whole > 0 ? Math.min(100, Math.max(0, (part / whole) * 100)) : 0);
 
-export function HelocCapacityEstimator() {
+export type CapacityCopy = {
+  title: string;
+  intro: string;
+  resultLead: string;
+  ctaLabel: string;
+  ctaHref: string;
+  /** id of the visible h2, for the section's aria-labelledby */
+  titleId?: string;
+};
+
+// Defaults are the HELOC design's copy.
+const helocCopy: CapacityCopy = {
+  title: "How much could I borrow with a HELOC?",
+  intro: "Lines of credit up to $750,000 across 170+ wholesale lending channels. You only pay for what you draw.",
+  resultLead: "In this scenario, you could qualify to borrow up to:",
+  ctaLabel: "Check my HELOC options",
+  ctaHref: `${getStartedHref}?goal=equity`,
+  titleId: "capacity-title",
+};
+
+export function CapacityEstimator({ copy = helocCopy }: { copy?: CapacityCopy }) {
   const [homeValue, setHomeValue] = useState(800_000);
   const [mortgageBalance, setMortgageBalance] = useState(550_000);
   const [otherLiens, setOtherLiens] = useState(0);
@@ -123,16 +143,15 @@ export function HelocCapacityEstimator() {
         {/* Result */}
         <div className="flex flex-col justify-between gap-4 rounded-card border border-line bg-white p-5 sm:p-6 lg:col-span-5">
           <div className="space-y-2">
-            <h2 id="capacity-title" className="text-[26px] font-medium leading-tight tracking-tight text-ink sm:text-[28px]">
-              How much could I borrow with a HELOC?
+            <h2 id={copy.titleId ?? "capacity-title"} className="text-[26px] font-medium leading-tight tracking-tight text-ink sm:text-[28px]">
+              {copy.title}
             </h2>
             <p className="text-[18px] leading-relaxed text-body">
-              Lines of credit up to $750,000 across 170+ wholesale lending channels. You only pay
-              for what you draw.
+              {copy.intro}
             </p>
           </div>
           <div className="space-y-1 border-y border-line py-4">
-            <p className="text-[16px] text-body">In this scenario, you could qualify to borrow up to:</p>
+            <p className="text-[16px] text-body">{copy.resultLead}</p>
             <p data-result className="text-[40px] font-semibold leading-tight tracking-tight text-ink">
               {formatUsd(capacity)}
             </p>
@@ -143,8 +162,8 @@ export function HelocCapacityEstimator() {
           </div>
           <LiveAnnouncer message={`You could borrow up to ${formatUsd(capacity)}`} />
           <div className="space-y-3">
-            <Link href={`${getStartedHref}?goal=equity`} className={buttonClass("primary", "w-full")}>
-              Check my HELOC options
+            <Link href={copy.ctaHref} className={buttonClass("primary", "w-full")}>
+              {copy.ctaLabel}
               <ArrowRight aria-hidden className="size-5" />
             </Link>
             <p className="text-center text-[15px] leading-snug text-body">

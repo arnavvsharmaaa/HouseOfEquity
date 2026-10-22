@@ -5,11 +5,13 @@
 // The prop types below only allow coarse, non-identifying labels, so a dollar amount, name,
 // phone or email cannot be passed by accident.
 
-export type FinancingGoal = "equity" | "debt" | "renovation" | "buy" | "refinance";
+export type FinancingGoal = "equity" | "debt" | "renovation" | "buy" | "refinance" | "other";
+
+export type Calculator = "equity_estimator" | "heloc_payment" | "loan_payment" | "purchase_payment";
 
 type EventMap = {
   financing_goal_select: { goal: FinancingGoal; location: string };
-  home_equity_calculator_complete: { calculator: "equity_estimator" | "heloc_payment" };
+  home_equity_calculator_complete: { calculator: Calculator };
   consultation_request_submit: { form: "contact" | "get_started" | "rate_match"; goal?: FinancingGoal };
   mortgage_phone_click: { location: string };
   application_start: { location: string };

@@ -19,21 +19,61 @@ npm run dev                  # http://localhost:3000
 npm run build && npm start   # production build
 ```
 
+## Pages
+
+`/` · `/heloc` · `/home-equity-loan` · `/cash-out-refinance` · `/debt-consolidation` · `/buy` ·
+`/refinance` · `/programs` · `/rate-match` · `/about` · `/contact` · `/licensing` · `/privacy` · `/terms`,
+plus `/sitemap.xml`, `/robots.txt`, `/opengraph-image` and a custom 404. Every page is statically
+generated; only `/api/lead` runs on the server.
+
 ## Project layout
 
 | Path | What lives there |
 | --- | --- |
 | `src/lib/site.ts` | **Single source of truth**: NMLS/DRE numbers, phone, email, offices, the 22 licensed states, nav. |
-| `src/lib/content/` | Page copy (taken verbatim from the designs). |
-| `src/lib/seo.ts` | Metadata helper (canonical + OG/Twitter) and JSON-LD builders. |
+| `src/lib/content/` | Page copy. `home.ts`/`heloc.ts` are verbatim from the designs; `pages.ts` marks each passage `[design]`, `[guide]` or `[new]`. |
+| `src/lib/seo.ts` | Metadata helper (canonical + OG/Twitter + share image) and JSON-LD builders. |
+| `src/lib/lead-schema.ts` | One zod schema for the lead forms, shared by the browser and `/api/lead`. |
 | `src/lib/analytics.ts` | `track()` event helper (no third-party script yet). |
-| `src/lib/equity.ts` | Equity estimator math: `capacity = max(0, value × CLTV − balances)`. |
+| `src/lib/equity.ts` | Estimator math: `capacity = max(0, value × CLTV − balances)` and amortized P&I. |
+| `src/app/api/lead/route.ts` | Lead endpoint: validation, honeypot, rate limit, upload checks, forwarding. |
 | `src/components/layout/` | Header, mobile menu, footer + disclosures, sticky mobile bar, delegated event listener. |
-| `src/components/sections/` | Reusable page sections (trust strip, FAQ, steps, testimonials, CTA…). |
-| `src/components/tools/` | Client-side calculators. |
-| `next.config.ts` | 301 redirects from old mfardous.com routes, security headers. |
+| `src/components/sections/` | Page blocks (`blocks.tsx`), shared sections (`shared.tsx`), breadcrumbs, legal layout. |
+| `src/components/tools/` | Client-side estimators (`EstimateBuilder`, `CapacityEstimator`, `PaymentEstimator`). |
+| `src/components/forms/` | `LeadForm` (Contact, Get Started, Rate Match with upload). |
+| `tests/e2e/qa.mjs` | Playwright QA suite (see Testing). |
+| `next.config.ts` | 301/308 redirects from old mfardous.com routes, security headers. |
 
 Design tokens (from the Stitch `DESIGN.md`, "Plain Clarity") are in `src/app/globals.css`.
+
+## Lead forms and `/api/lead`
+
+The Contact / Get Started form (`/contact`, which preselects the goal from `?goal=`) and the Rate
+Match form (`/rate-match`) post `multipart/form-data` to `/api/lead`, which:
+
+1. rejects bodies over ~10.5 MB before parsing (`413`);
+2. rate-limits each client IP to `LEAD_RATE_LIMIT` submissions per 10 minutes (`429`). The counter
+   lives in memory, so on Vercel it is per-instance and best-effort; use a shared store (e.g. Upstash
+   Redis) if spam becomes a problem;
+3. returns a quiet `200` and forwards nothing when the hidden honeypot field `company` is filled;
+4. validates fields with the shared zod schema and returns `400 { errors: { field: message } }`;
+5. for Rate Match only, accepts one Loan Estimate (PDF, JPG, PNG, HEIC, WEBP; max 10 MB) and checks the
+   file's first bytes, not just its name;
+6. forwards the lead as JSON to `STUDIO_ESCROW_WEBHOOK_URL`, or, when that is not set, **logs the
+   payload to the server console** (file contents omitted) and returns success.
+
+Forwarded JSON: `name, phone (10 digits), email, goal, message, consent, formType
+(contact | get_started | rate_match), source (page path), utm_*, submittedAt`, and `file` as
+`{ name, type, size, base64 }` or `null`. Confirm this shape with Studio Escrow's inbound webhook.
+
+Personal data never goes into URLs or analytics: only the goal category appears in `?goal=`, and
+`consultation_request_submit` carries just the form type and goal.
+
+> **⚠️ Deployment blocker for 10 MB uploads on Vercel.** Vercel Functions accept request bodies up to
+> **4.5 MB**, so Loan Estimates between 4.5 and 10 MB will fail there (smaller files and all other
+> fields work). Before launch, either upload files straight from the browser to storage (e.g. Vercel
+> Blob client uploads) and send the file URL to `/api/lead`, or lower the limit to 4 MB in
+> `src/lib/lead-schema.ts`.
 
 ## Analytics
 
@@ -47,13 +87,38 @@ coarse labels only — **no dollar amounts or personal data can be sent.**
 
 | Name | Where | Purpose |
 | --- | --- | --- |
-| `STUDIO_ESCROW_WEBHOOK_URL` | Server only | Studio Escrow inbound webhook that `/api/lead` forwards leads to. Never prefixed `NEXT_PUBLIC_`. |
+| `STUDIO_ESCROW_WEBHOOK_URL` | Server only | Studio Escrow inbound webhook that `/api/lead` forwards leads to. Never prefixed `NEXT_PUBLIC_`. When unset, leads are logged to the server console instead. |
+| `LEAD_RATE_LIMIT` | Server only, optional | Submissions allowed per IP per 10 minutes (default `5`). |
 
-_(Lead forms, `/api/lead`, and deployment notes are added in the next phase.)_
+## Testing
+
+```bash
+npm run build
+npx next start -p 3100 > server.log 2>&1 &           # any port
+TARGET_URL=http://localhost:3100 SERVER_LOG=server.log npm run test:e2e
+```
+
+The suite (`tests/e2e/qa.mjs`, Playwright via `playwright-core` and your installed Chrome; set
+`PW_CHANNEL=msedge` for Edge) checks every page for: sideways scroll at 1440/1366/768/390px; estimators
+fitting one 1366×768 screen; titles, descriptions, canonicals, share images, JSON-LD
+(FinancialService, BreadcrumbList, FAQPage), heading order, sitemap, robots and legacy redirects;
+keyboard focus visibility and focus never hidden behind the sticky header or mobile bar; FAQ, tabs
+and mobile menu by keyboard; estimator math at edge values; sentence-builder routing; the sticky bar
+clearing the footer; form validation, error summary, goal prefill, success state, analytics without
+personal data, honeypot, upload limits; and `/api/lead` validation, file sniffing, size limit and rate
+limiting. Run a subset with `ONLY=forms,api`. Screenshots land in `tests/e2e/artifacts/` (git-ignored).
+
+## Deployment (Vercel)
+
+1. Import the repository in Vercel (framework preset: Next.js; no build settings to change).
+2. Add `STUDIO_ESCROW_WEBHOOK_URL` (Production and Preview) under Settings → Environment Variables.
+3. Point `houseofequity.co` at the project. To keep the old site's links, also add `mfardous.com`
+   (and `www.`) as domains of this project, so the redirects in `next.config.ts` apply to them.
+4. Resolve the upload-size blocker above and every item in "Before launch: verify".
 
 ## Before launch: verify
 
-Every claim below appears on the site because it is in the Stitch designs. Each needs a source,
+Every claim below appears on the site, either because it is in the Stitch designs or because it was written for the inner pages. Each needs a source,
 written approval, or a rewrite before public launch (brand guide §13, "Non-negotiable publishing gates").
 ✅ = confirmed by Mohamad in review; ⚠️ = flagged, unconfirmed.
 
@@ -138,6 +203,38 @@ written approval, or a rewrite before public launch (brand guide §13, "Non-nego
 - ⚠️ **"In most instances, no"** in-person appraisal.
 - ⚠️ **"Both options are available through our network"** (variable and fixed-rate draw).
 - ⚠️ **Soft-pull answer** ("does not affect your credit scores").
+
+### Inner pages: claims reused from the designs
+Reused on additional pages and covered by the items above: "170+ wholesale lenders" (`/cash-out-refinance`,
+`/refinance`, `/buy`, `/rate-match`, `/programs`, `/about`), "Fixed rates from 10 to 30 years" and
+"Zero prepayment penalties" (`/home-equity-loan`), "22%+", "freeing up hundreds every single month" and
+"Average monthly savings of $650+" (`/debt-consolidation` hero), "options starting at just 3% down",
+"0% down options for military veterans", "Fast pre-approvals" (`/buy` hero and FAQ), the Rate Match
+promises (`/rate-match`), the testimonials (`/about`, `/debt-consolidation`).
+
+### Inner pages: new claims
+- ⚠️ **"10+ years in mortgage finance"** (`/about` stats): the brief lists "10+ years" as approved; confirm the exact wording.
+- ⚠️ **Programs offered** (`/programs`): Conventional/FHA/VA, Jumbo, Bank Statement, DSCR, Asset-Based, Interest-Only, Physician and Bridge are listed because the old site's routes redirect there. The guide says to list specialty and bridge programs **only if offered**; confirm each.
+- ⚠️ **"Fixed or adjustable rates"** for cash-out refinancing, and "fixed-rate options may be available" for HELOCs (comparison tables).
+- ⚠️ **"tells you honestly when keeping your current loan is the better choice"** (`/refinance` intro).
+- ⚠️ **Call/text consent wording** on every form: needs compliance (TCPA) review.
+
+### Inner pages: new explanatory copy (`[new]` in `src/lib/content/pages.ts`)
+Plain-English explanations written for these pages, with no new numbers. Mohamad should read and approve:
+- FAQs on `/home-equity-loan`, `/cash-out-refinance`, `/debt-consolidation`, `/buy`, `/refinance`, `/programs`, `/rate-match`.
+- The equity comparison table (home equity loan vs HELOC vs cash-out), the cash-out trade-offs, the
+  debt consolidation steps and "Things to weigh first", the refinance option cards, the program
+  definitions, and the "What happens next" steps on `/contact`.
+- Hero headlines not from the designs: "Replace your mortgage and take cash out." and "Lower your
+  rate, change your term, or take cash out." Others come from the guide's slogan library ("Make More
+  of What You Own.", "Financing That Feels Like Home.", "Home Financing, Made Human.", "Your Home. Your
+  Goals. Let's Talk.", "Multiple payments? Explore a simpler approach.").
+- **`/privacy` and `/terms` are drafts**, labeled on the page as pending compliance review.
+
+### Estimators on the inner pages
+- Payment estimators on `/home-equity-loan`, `/buy` and `/refinance` start with an **empty** rate (no
+  advertised rate); the visitor enters one. `/heloc` keeps the design's prefilled 8.15% (flagged above).
+- `/buy` shows principal & interest only and says taxes, insurance, mortgage insurance and HOA dues are excluded.
 
 ### Missing data
 - ⚠️ Irvine office ZIP code (not supplied; omitted from address and JSON-LD).
