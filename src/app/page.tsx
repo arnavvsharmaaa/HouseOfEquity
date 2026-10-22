@@ -9,6 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { AdvisorSection, HowItWorksSection, RateMatchSection } from "@/components/sections/blocks";
+import { PartnersSection } from "@/components/sections/Partners";
 import { ProductTabs } from "@/components/sections/ProductTabs";
 import {
   CheckList,
@@ -271,6 +272,7 @@ export default function HomePage() {
       <Hero />
       <HelocTeaser />
       <TrustStrip />
+      <PartnersSection />
       <KeepYourRate />
       <Estimate />
       <Products />

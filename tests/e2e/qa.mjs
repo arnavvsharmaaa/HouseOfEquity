@@ -424,7 +424,27 @@ async function api() {
   log("api", res.status === 405, `GET /api/lead → ${res.status}`);
 }
 
-const suites = { layout, fit, seo, keyboard, keyboardInteractions, math, routing, stickyBar, forms, api };
+// ---------- homepage partner logos ----------
+async function partners(browser) {
+  const page = await open(browser, "/", 1440, 900);
+  const section = page.locator("section[aria-labelledby=partners-title]");
+  const before = await section.locator("img").evaluateAll((imgs) => imgs.map((i) => i.loading));
+  await section.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll("section[aria-labelledby=partners-title] img")].every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 10000 });
+  const info = await section.locator("img").evaluateAll((imgs) =>
+    imgs.map((i) => ({ alt: i.alt, ok: i.naturalWidth > 0, h: Math.round(i.getBoundingClientRect().height), linked: !!i.closest("a"), gray: getComputedStyle(i).filter })),
+  );
+  const broken = info.filter((i) => !i.ok).map((i) => i.alt);
+  log("partners", info.length === 8 && broken.length === 0, `${info.length} images load (${broken.length ? "broken: " + broken.join(", ") : "none broken"})`);
+  log("partners", info.every((i) => /logo|badge/i.test(i.alt) && i.alt.length > 8), `descriptive alt text: ${info.map((i) => i.alt).join(" | ")}`);
+  log("partners", info.every((i) => !i.linked), "logos are not links");
+  log("partners", before.every((l) => l === "lazy"), `all logos lazy-load (${before.join(",")})`);
+  const row = info.slice(1, 7);
+  log("partners", row.every((i) => i.h >= 24 && i.h <= 48) && row.every((i) => i.gray.includes("grayscale")), `partner row heights ${row.map((i) => i.h).join("/")}px, grayscale at rest`);
+  await page.context().close();
+}
+
+const suites = { partners, layout, fit, seo, keyboard, keyboardInteractions, math, routing, stickyBar, forms, api };
 const browser = await chromium.launch({ channel: CHANNEL, headless: process.env.PW_HEADLESS !== "false" });
 try {
   for (const [name, fn] of Object.entries(suites)) {
