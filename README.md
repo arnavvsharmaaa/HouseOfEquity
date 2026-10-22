@@ -238,7 +238,7 @@ Plain-English explanations written for these pages, with no new numbers. Mohamad
 
 ### Top Lending Partners (homepage)
 - ⚠️ **Partner logos: confirm usage permission** for Rocket Pro (Elite Mortgage Broker badge), Spring EQ, EPM Wholesale, Nations Direct Mortgage, Kind Lending, LoanStream Mortgage, Figure and Broker Action Coalition. Files were copied from westcapitallending.com and mfardous.com into `public/partners/` (Figure and Spring EQ cropped to remove empty padding). Note the brand guide says "Do not … copy lender imagery or logos", so written permission from each company is needed.
-- ⚠️ **"Rocket Mortgage's #1 National Broker Partner for 4 years"** and the J.D. Power note, copied from mfardous.com: confirm the current wording and that the J.D. Power reference (2022 – 2023 studies) may still be used.
+- ⚠️ **"Rocket Mortgage's #1 National Broker Partner, 4 years"** (homepage trust band) and the J.D. Power note (footer disclosures, footnote 1), both from mfardous.com: confirm the current wording and that the J.D. Power reference (2022 – 2023 studies) may still be used.
 
 ### Missing data
 - ⚠️ Irvine office ZIP code (not supplied; omitted from address and JSON-LD).

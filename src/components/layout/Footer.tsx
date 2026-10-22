@@ -124,6 +124,11 @@ export function Footer() {
             *Close in as few as 3 days: eligible digital HELOCs only. Funds released after the 3-day
             right of rescission. Subject to credit and property approval.
           </p>
+          <p id="fn-jd-power" className="scroll-mt-28">
+            <sup>1</sup> Rocket Mortgage received the highest score in the J.D. Power 2022 – 2023
+            Primary Mortgage Servicer Satisfaction Studies. Visit jdpower.com/awards for more
+            information.
+          </p>
           <p>
             Verify licensing at{" "}
             <a

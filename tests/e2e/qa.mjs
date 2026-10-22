@@ -19,8 +19,10 @@ export const ROUTES = [
 ];
 const SERVER_LOG = process.env.SERVER_LOG; // optional: the next start log, to confirm what was forwarded
 let ipCounter = 0;
-// TEST-NET-3 addresses, one per test, so the per-IP rate limit never collides between tests.
-const freshIp = () => `203.0.113.${++ipCounter}`;
+// Benchmark-range addresses (198.18.0.0/15): one per test, and a random block per run, so the
+// server's in-memory rate limit never carries over between tests or between runs.
+const runBlock = Math.floor(Math.random() * 256);
+const freshIp = () => `198.18.${runBlock}.${++ipCounter}`;
 const VIEWPORTS = [[1440, 900], [1366, 768], [768, 1024], [390, 844]];
 
 const results = [];
@@ -440,7 +442,17 @@ async function partners(browser) {
   log("partners", info.every((i) => !i.linked), "logos are not links");
   log("partners", before.every((l) => l === "lazy"), `all logos lazy-load (${before.join(",")})`);
   const row = info.slice(1, 7);
-  log("partners", row.every((i) => i.h >= 24 && i.h <= 48) && row.every((i) => i.gray.includes("grayscale")), `partner row heights ${row.map((i) => i.h).join("/")}px, grayscale at rest`);
+  log("partners", row.every((i) => i.h >= 20 && i.h <= 36) && row.every((i) => i.gray.includes("grayscale")), `partner logo heights ${row.map((i) => i.h).join("/")}px (max 36), grayscale at rest`);
+  const band = await section.evaluate((el) => ({ h: Math.round(el.getBoundingClientRect().height), text: el.innerText }));
+  log("partners", band.h <= 320 && !band.text.includes("J.D. Power"), `compact band: ${band.h}px tall, J.D. Power note moved out`);
+  const marker = section.getByRole("link", { name: /Footnote 1/ });
+  await marker.click();
+  const note = await page.evaluate(() => {
+    const el = document.querySelector("#fn-jd-power");
+    const r = el?.getBoundingClientRect();
+    return el ? { text: el.innerText, visible: r.top >= 0 && r.bottom <= innerHeight } : null;
+  });
+  log("partners", !!note && note.visible && /J.D. Power 2022 – 2023/.test(note.text) , `footnote marker scrolls to footer note 1 (visible: ${note?.visible})`);
   await page.context().close();
 }
 
