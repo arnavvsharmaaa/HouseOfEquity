@@ -148,7 +148,7 @@ function WhatIsHeloc() {
           </p>
         </div>
         <h3 className="text-[24px] font-medium text-ink">What you need to qualify</h3>
-        <ul className="mt-5 grid gap-6 md:grid-cols-3">
+        <ul className="mt-5 grid gap-6 lg:grid-cols-3">
           {qualifyCards.map((card) => {
             const Icon = qualifyIcons[card.icon];
             return (
@@ -183,7 +183,7 @@ function HowItWorks() {
           intro="Three quiet, transparent milestones between you and your line of credit."
           className="mb-12"
         />
-        <ol className="grid gap-6 md:grid-cols-3">
+        <ol className="grid gap-6 lg:grid-cols-3">
           {helocSteps.map((step, i) => {
             const Icon = stepIcons[i];
             return (
@@ -222,8 +222,8 @@ function Comparison() {
           className="mb-12"
         />
 
-        {/* Table from md up */}
-        <div className="hidden overflow-hidden rounded-card border border-line bg-white md:block">
+        {/* Table from lg up */}
+        <div className="hidden overflow-hidden rounded-card border border-line bg-white lg:block">
           <table className="w-full border-collapse text-left">
             <caption className="sr-only">HELOC compared with a bank HELOC and a personal loan</caption>
             <thead>
@@ -265,7 +265,7 @@ function Comparison() {
         </div>
 
         {/* Stacked cards on small screens: no sideways scrolling */}
-        <ul className="space-y-4 md:hidden">
+        <ul className="space-y-4 lg:hidden">
           {comparison.rows.map((row) => (
             <li key={row.feature} className="rounded-card border border-line bg-white p-5">
               <h3 className="text-[19px] font-medium text-ink">{row.feature}</h3>
@@ -356,13 +356,13 @@ function Related() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="group flex h-full flex-col justify-between gap-3 rounded-card border border-line bg-white p-5 transition-colors hover:border-navy/40 hover:bg-neutral-50"
+                className="group flex h-full flex-col justify-between gap-3 rounded-card border border-line bg-white p-5 transition-[background-color,border-color,transform] duration-150 ease-out hover:border-navy/40 hover:bg-surface-hover motion-safe:active:scale-[0.99]"
               >
                 <span>
                   <span className="block text-[19px] font-medium text-ink">{l.title}</span>
                   <span className="text-[17px] text-body">{l.body}</span>
                 </span>
-                <ArrowRight aria-hidden className="size-5 text-navy transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight aria-hidden className="size-5 text-navy transition-transform duration-150 ease-out motion-safe:group-hover:translate-x-0.5" />
               </Link>
             </li>
           ))}
@@ -386,14 +386,16 @@ export default function HelocPage() {
       <HowItWorks />
       <section id="payment" aria-labelledby="payment-title" className="py-16 lg:py-24">
         <Container>
-          <SectionHeading
-            id="payment-title"
-            eyebrow="Budget Planning"
-            title="Estimate your monthly payment"
-            intro="Based on loan amount, repayment term, and interest rate."
-            className="mb-8"
-          />
-          <HelocPaymentEstimator />
+          <div data-fit>
+            <SectionHeading
+              id="payment-title"
+              eyebrow="Budget Planning"
+              title="Estimate your monthly payment"
+              intro="Based on loan amount, repayment term, and interest rate."
+              className="mb-8"
+            />
+            <HelocPaymentEstimator />
+          </div>
         </Container>
       </section>
       <Comparison />

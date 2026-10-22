@@ -15,7 +15,7 @@ export function Logo({ compact = false, className }: { compact?: boolean; classN
       <span className="flex flex-col">
         <span className="text-[20px] font-medium leading-tight tracking-tight text-ink">{site.name}</span>
         {!compact && (
-          <span className="hidden text-[11px] font-semibold uppercase whitespace-nowrap tracking-[0.08em] text-navy lg:block">
+          <span className="hidden whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.03em] text-navy lg:block">
             {site.descriptor}
           </span>
         )}

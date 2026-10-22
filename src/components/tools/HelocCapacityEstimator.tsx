@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ArrowRight, CircleCheck, SlidersHorizontal } from "lucide-react";
 import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
+import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
 import { buttonClass, cx } from "@/components/ui/primitives";
 import { DEFAULT_CLTV, estimateEquity, formatUsd } from "@/lib/equity";
@@ -46,7 +47,7 @@ export function HelocCapacityEstimator() {
   ];
 
   return (
-    <div className="rounded-panel border border-line bg-panel p-4 sm:p-8 lg:px-10 lg:py-7">
+    <div data-fit className="rounded-panel border border-line bg-panel p-4 sm:p-8 lg:px-10 lg:py-7">
       <p className="mb-4 flex items-center gap-2 text-[17px] font-semibold text-navy">
         <SlidersHorizontal aria-hidden className="size-5 shrink-0" />
         Adjust the sliders below to calculate your custom borrowing capacity
@@ -91,7 +92,7 @@ export function HelocCapacityEstimator() {
               {segments.map((s) => (
                 <span
                   key={s.label}
-                  className={cx("h-full transition-[width] duration-300", s.className)}
+                  className={cx("h-full", s.className)}
                   style={{ width: `${pct(s.value, homeValue)}%` }}
                 />
               ))}
@@ -130,9 +131,9 @@ export function HelocCapacityEstimator() {
               for what you draw.
             </p>
           </div>
-          <div className="space-y-1 border-y border-line py-4" aria-live="polite" aria-atomic="true">
+          <div className="space-y-1 border-y border-line py-4">
             <p className="text-[16px] text-body">In this scenario, you could qualify to borrow up to:</p>
-            <p className="text-[40px] font-semibold leading-tight tracking-tight text-ink">
+            <p data-result className="text-[40px] font-semibold leading-tight tracking-tight text-ink">
               {formatUsd(capacity)}
             </p>
             <p className="inline-flex items-center gap-1.5 text-[16px] font-medium text-navy">
@@ -140,6 +141,7 @@ export function HelocCapacityEstimator() {
               {cltvLabel} Combined LTV Threshold
             </p>
           </div>
+          <LiveAnnouncer message={`You could borrow up to ${formatUsd(capacity)}`} />
           <div className="space-y-3">
             <Link href={`${getStartedHref}?goal=equity`} className={buttonClass("primary", "w-full")}>
               Check my HELOC options

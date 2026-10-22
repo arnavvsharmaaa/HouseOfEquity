@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ArrowRight, ChevronDown, Lock, ShieldCheck } from "lucide-react";
 import { CltvField } from "./CltvField";
 import { CurrencyField } from "./CurrencyField";
+import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
 import { buttonClass } from "@/components/ui/primitives";
 import { track, type FinancingGoal } from "@/lib/analytics";
@@ -44,7 +45,7 @@ function InlineSelect<T extends string>({
         aria-label={label}
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className="min-h-12 max-w-full cursor-pointer appearance-none rounded-full border border-navy-line bg-navy-tint py-0.5 pl-4 pr-11 text-[22px] font-medium text-navy hover:bg-[#e5ecf6] sm:text-[28px] xl:text-[30px]"
+        className="min-h-12 max-w-full cursor-pointer appearance-none rounded-full border border-navy-line bg-navy-tint py-0.5 pl-4 pr-11 text-[22px] font-medium text-navy transition-colors hover:bg-navy-tint-hover sm:text-[28px] xl:text-[30px]"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -182,16 +183,16 @@ export function EstimateBuilder() {
           </div>
 
           <div className="flex-1 space-y-3 rounded-card border border-line bg-panel p-4">
-            <div aria-live="polite" aria-atomic="true">
+            <div>
               <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-body">
                 Here&apos;s your estimate so far
               </p>
               <p className="text-[18px] font-medium text-ink">{metricTitle[goal]}</p>
-              <p className="text-[34px] font-medium leading-tight tracking-tight text-ink">
+              <p data-result className="text-[34px] font-medium leading-tight tracking-tight text-ink">
                 {formatUsd(capacity)}
               </p>
             </div>
-            <dl className="space-y-1 rounded-[14px] border border-line bg-white px-4 py-3 text-[18px]">
+            <dl className="space-y-1 border-t border-line pt-3 text-[18px]">
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-body">Total home equity:</dt>
                 <dd className="whitespace-nowrap font-medium text-ink">{formatUsd(equity)}</dd>
@@ -207,6 +208,7 @@ export function EstimateBuilder() {
             </dl>
           </div>
 
+          <LiveAnnouncer message={`${metricTitle[goal]}: ${formatUsd(capacity)}`} />
           <p className="mt-3 text-[15px] leading-snug text-body">
             <strong className="font-semibold text-ink">
               Illustration only. Not an approval or rate quote.

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useId, useState } from "react";
 import { CurrencyField } from "./CurrencyField";
+import { LiveAnnouncer } from "./LiveAnnouncer";
 import { useReportCalculatorOnce } from "./useReportOnce";
 import { formatUsd, monthlyPayment } from "@/lib/equity";
 import { getStartedHref } from "@/lib/site";
@@ -45,7 +46,7 @@ export function HelocPaymentEstimator() {
             {terms.map((t) => (
               <label
                 key={t}
-                className="flex min-h-12 cursor-pointer items-center justify-center rounded-full border border-field bg-white text-[17px] font-medium text-ink transition-colors hover:border-navy has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-white has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-navy"
+                className="flex min-h-12 cursor-pointer items-center justify-center rounded-full border border-field bg-white text-[17px] font-medium text-ink transition-[background-color,border-color,color,transform] duration-150 ease-out hover:border-navy motion-safe:active:scale-[0.98] has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-white has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-navy"
               >
                 <input
                   type="radio"
@@ -102,15 +103,18 @@ export function HelocPaymentEstimator() {
 
       {/* Result (dark panel, as in the design) */}
       <div className="flex flex-col justify-between gap-5 bg-ink p-5 text-white sm:p-8 lg:col-span-5 lg:px-10 lg:py-8">
-        <div aria-live="polite" aria-atomic="true">
+        <div>
           <p className="text-[14px] font-semibold uppercase tracking-[0.1em] text-white/80">
             Estimated Monthly Breakdown
           </p>
-          <p className="mt-2 text-[44px] font-semibold leading-tight tracking-tight">
+          <p data-result className="mt-2 text-[44px] font-semibold leading-tight tracking-tight">
             {rateValid ? formatUsd(payment) : "—"}
           </p>
           <p className="text-[17px] text-white/80">Principal &amp; Interest / month</p>
         </div>
+        <LiveAnnouncer
+          message={rateValid ? `Estimated payment ${formatUsd(payment)} per month` : "Enter a valid interest rate"}
+        />
         <dl className="space-y-1 border-t border-white/25 pt-4 text-[18px]">
           <div className="flex justify-between gap-3">
             <dt className="text-white/80">Selected Line:</dt>
@@ -128,7 +132,7 @@ export function HelocPaymentEstimator() {
         <div className="space-y-3">
           <Link
             href={`${getStartedHref}?goal=equity`}
-            className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-white px-7 text-[17px] font-medium text-ink transition-colors hover:bg-panel focus-visible:outline-white"
+            className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-white px-7 text-[17px] font-medium text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-panel focus-visible:outline-white motion-safe:active:scale-[0.98]"
           >
             Lock in this estimate
           </Link>

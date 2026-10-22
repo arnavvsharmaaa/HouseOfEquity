@@ -102,7 +102,7 @@ export function Footer() {
         </div>
 
         {/* Required disclosures */}
-        <div className="mt-12 space-y-3 rounded-[16px] border border-line bg-white p-5 text-[15px] leading-relaxed text-body sm:p-6">
+        <div className="mt-12 space-y-3 rounded-[16px] border border-line bg-white p-5 text-[15px] leading-relaxed text-body sm:p-6 [&>p]:max-w-[80ch]">
           <p className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.1em] text-ink">
             <EqualHousingIcon className="size-7 text-ink" />
             Equal Housing Opportunity

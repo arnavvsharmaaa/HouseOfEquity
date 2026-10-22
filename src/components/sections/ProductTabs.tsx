@@ -32,7 +32,7 @@ function Card({ card }: { card: ProductCard }) {
         <IconCircle>
           <Icon className="size-6" strokeWidth={1.75} />
         </IconCircle>
-        <h3 className="text-[21px] font-medium text-ink">{card.title}</h3>
+        <h3 className="text-[22px] font-medium text-ink">{card.title}</h3>
         <p className="text-[18px] leading-relaxed text-body">{card.body}</p>
         {card.points && (
           <ul className="space-y-2 pt-2">
@@ -99,7 +99,7 @@ export function ProductTabs({
               onClick={() => setActive(i)}
               onKeyDown={onKeyDown}
               className={cx(
-                "min-h-12 rounded-full px-6 text-[17px] font-medium transition-colors",
+                "min-h-12 rounded-full px-6 text-[17px] font-medium transition-[background-color,color,transform] duration-150 ease-out motion-safe:active:scale-[0.98]",
                 active === i ? "bg-ink text-white" : "text-body hover:text-ink",
               )}
             >
@@ -117,7 +117,7 @@ export function ProductTabs({
           aria-labelledby={`${baseId}-tab-${tab.id}`}
           hidden={active !== i}
         >
-          <ul className="grid gap-6 md:grid-cols-3">
+          <ul className="grid gap-6 lg:grid-cols-3">
             {tab.cards.map((card) => (
               <Card key={card.title} card={card} />
             ))}

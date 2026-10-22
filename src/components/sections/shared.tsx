@@ -121,7 +121,7 @@ export function StepCards({
   surface?: "panel" | "white";
 }) {
   return (
-    <ol className="grid gap-6 md:grid-cols-3">
+    <ol className="grid gap-6 lg:grid-cols-3">
       {steps.map((step, i) => (
         <li
           key={step.title}
@@ -131,7 +131,7 @@ export function StepCards({
           )}
         >
           <NumberBadge n={i + 1} tone={i === 1 ? "navy" : "ink"} />
-          <h3 className="mb-2 mt-6 text-[21px] font-medium text-ink">
+          <h3 className="mb-2 mt-6 text-[22px] font-medium text-ink">
             <span className="sr-only">Step {i + 1}: </span>
             {step.title}
           </h3>
@@ -162,7 +162,7 @@ export function Testimonials({
           </div>
           <p className="text-[17px] text-body">Client stories from {licensedStates.length} states</p>
         </div>
-        <ul className="grid gap-6 md:grid-cols-3">
+        <ul className="grid gap-6 lg:grid-cols-3">
           {items.map((t) => (
             <li key={t.name} className="flex flex-col justify-between rounded-card border border-line bg-white p-7 sm:p-8">
               <figure className="flex h-full flex-col justify-between">
@@ -202,11 +202,11 @@ export function FaqList({
         <div className="space-y-3.5">
           {faqs.map((f) => (
             <details key={f.q} className="group rounded-tile border border-line bg-white">
-              <summary className="flex min-h-16 cursor-pointer items-center justify-between gap-4 rounded-tile p-5 text-left text-[19px] font-medium text-ink hover:bg-neutral-50 sm:p-6">
+              <summary className="flex min-h-16 cursor-pointer items-center justify-between gap-4 rounded-tile p-5 text-left text-[19px] font-medium text-ink transition-colors hover:bg-surface-hover sm:p-6">
                 {f.q}
                 <Plus
                   aria-hidden
-                  className="size-6 shrink-0 text-navy transition-transform group-open:rotate-45"
+                  className="size-6 shrink-0 text-navy transition-transform duration-200 ease-out group-open:rotate-45 motion-reduce:transition-none"
                 />
               </summary>
               <p className="border-t border-line/60 px-5 pb-6 pt-4 text-[18px] leading-relaxed text-body sm:px-6">
@@ -240,7 +240,7 @@ export function FinalCta({
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id="final-cta-title"
-            className="mx-auto max-w-2xl text-[34px] leading-tight tracking-tight text-ink sm:text-[44px]"
+            className="mx-auto max-w-2xl text-[32px] leading-tight tracking-tight text-ink sm:text-[40px]"
           >
             {title}
           </h2>

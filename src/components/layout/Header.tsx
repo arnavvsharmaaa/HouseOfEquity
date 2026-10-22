@@ -26,7 +26,7 @@ export function Header() {
             className="flex min-h-12 min-w-12 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line px-2 text-[17px] font-medium text-ink hover:text-ink-hover sm:border-0"
           >
             <Phone aria-hidden className="size-5 text-navy" />
-            <span className="sr-only sm:not-sr-only">
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               <span className="sr-only">Call </span>
               {site.phone.display}
             </span>

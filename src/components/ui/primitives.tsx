@@ -12,7 +12,7 @@ export function Container({ className, children }: { className?: string; childre
 }
 
 const buttonBase =
-  "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full px-7 text-[17px] font-medium transition-colors";
+  "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full px-7 text-[17px] font-medium transition-[background-color,border-color,color,transform] duration-150 ease-out motion-safe:active:scale-[0.98]";
 
 const buttonVariants = {
   primary: "bg-ink text-white hover:bg-ink-hover",

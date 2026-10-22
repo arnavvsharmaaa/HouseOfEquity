@@ -16,6 +16,7 @@ export function CurrencyField({
   step,
   hint,
   slider = true,
+  limit = max * 10,
 }: {
   label: string;
   value: number;
@@ -26,10 +27,14 @@ export function CurrencyField({
   hint?: string;
   /** Show the paired range slider (default true). */
   slider?: boolean;
+  /** Highest value accepted when typed (the slider stops at max). */
+  limit?: number;
 }) {
   const id = useId();
   const [text, setText] = useState(formatUsd(value));
   const [editing, setEditing] = useState(false);
+  const [overLimit, setOverLimit] = useState(false);
+  const describedBy = [hint && `${id}-hint`, overLimit && `${id}-limit`].filter(Boolean).join(" ") || undefined;
 
   // Reflect slider changes in the text box unless the user is typing in it.
   useEffect(() => {
@@ -53,12 +58,14 @@ export function CurrencyField({
         type="text"
         inputMode="numeric"
         autoComplete="off"
-        aria-describedby={hint ? `${id}-hint` : undefined}
+        aria-describedby={describedBy}
         value={text}
         onFocus={() => setEditing(true)}
         onChange={(e) => {
           setText(e.target.value);
-          onChange(Math.min(parseUsd(e.target.value), max * 10));
+          const typed = parseUsd(e.target.value);
+          setOverLimit(typed > limit);
+          onChange(Math.min(typed, limit));
         }}
         onBlur={() => {
           setEditing(false);
@@ -66,6 +73,11 @@ export function CurrencyField({
         }}
         className="mt-1 min-h-12 w-full rounded-[12px] border border-field bg-white px-4 text-[19px] font-medium text-ink"
       />
+      {overLimit && (
+        <p id={`${id}-limit`} className="pt-1 text-[15px] text-body">
+          Maximum {formatUsd(limit)}. We used that amount.
+        </p>
+      )}
       {slider && (
         <input
           type="range"
@@ -75,7 +87,10 @@ export function CurrencyField({
           step={step}
           value={Math.min(Math.max(value, min), max)}
           aria-valuetext={formatUsd(value)}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(e) => {
+            setOverLimit(false);
+            onChange(Number(e.target.value));
+          }}
         />
       )}
     </div>

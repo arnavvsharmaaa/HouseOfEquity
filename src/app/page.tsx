@@ -80,7 +80,7 @@ function Hero() {
               <h2 className="mb-3 text-[17px] font-medium text-ink">
                 Choose a path to get tailored numbers:
               </h2>
-              <ul className="grid max-w-xl gap-3.5 sm:grid-cols-2">
+              <ul className="grid max-w-2xl gap-3.5 sm:grid-cols-2">
                 {heroPaths.map((p) => {
                   const Icon = pathIcons[p.icon];
                   return (
@@ -88,7 +88,7 @@ function Hero() {
                       <Link
                         href={p.href}
                         data-goal={p.goal}
-                        className="group flex min-h-[76px] items-center justify-between gap-3 rounded-tile border border-line bg-white p-4 transition-colors hover:border-navy/40 hover:bg-neutral-50"
+                        className="group flex min-h-[76px] items-center justify-between gap-3 rounded-tile border border-line bg-white p-4 transition-[background-color,border-color,transform] duration-150 ease-out hover:border-navy/40 hover:bg-surface-hover motion-safe:active:scale-[0.99]"
                       >
                         <span className="flex items-center gap-3.5">
                           <IconCircle className="size-11 transition-colors group-hover:bg-ink group-hover:text-white">
@@ -103,7 +103,7 @@ function Hero() {
                         </span>
                         <ArrowRight
                           aria-hidden
-                          className="size-5 shrink-0 text-body transition-transform group-hover:translate-x-0.5 group-hover:text-ink"
+                          className="size-5 shrink-0 text-body transition-[color,transform] duration-150 ease-out group-hover:text-ink motion-safe:group-hover:translate-x-0.5"
                         />
                       </Link>
                     </li>
@@ -125,14 +125,14 @@ function Hero() {
             </div>
           </div>
 
-          <div className="lg:col-span-5">
+          <div className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
             <div className="relative rounded-panel border border-line bg-white p-3">
               <ImagePlaceholder
                 alt="Joyful couple holding new home keys"
                 note="Lifestyle photo to be supplied"
                 className="aspect-square w-full rounded-tile"
               />
-              <div className="mt-3 flex flex-wrap sm:absolute sm:inset-x-6 sm:bottom-6 sm:mt-0 items-center justify-between gap-3 rounded-tile border border-line bg-white/95 p-4">
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-tile border border-line bg-white/95 p-4 sm:absolute sm:inset-x-6 sm:bottom-6 sm:mt-0 sm:flex-nowrap">
                 <div className="flex items-center gap-3">
                   <IconCircle className="size-10">
                     <Star className="size-5" strokeWidth={1.75} />
@@ -145,7 +145,7 @@ function Hero() {
                     <p className="text-[15px] text-body">Verified Client Rating on Zillow</p>
                   </div>
                 </div>
-                <span className="rounded-full border border-line bg-panel px-2.5 py-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-navy">
+                <span className="shrink-0 rounded-full border border-line bg-panel px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.06em] text-navy">
                   Top Broker
                 </span>
               </div>
@@ -196,14 +196,14 @@ function KeepYourRate() {
             />
             <p className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-line bg-white/95 px-3.5 py-1.5">
               <span aria-hidden className="size-2 rounded-full bg-navy" />
-              <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-navy">
+              <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-navy">
                 Preserve Your 1st Rate
               </span>
             </p>
           </div>
           <div className="space-y-6">
             <Eyebrow>Smart Financing</Eyebrow>
-            <h2 id="keep-rate-title" className="text-[34px] leading-tight tracking-tight text-ink sm:text-[42px]">
+            <h2 id="keep-rate-title" className="text-[32px] leading-tight tracking-tight text-ink sm:text-[40px]">
               Use your equity, <br />
               <span className="font-medium">keep your rate</span>
             </h2>
@@ -240,7 +240,7 @@ function Estimate() {
   return (
     <section id="estimate" aria-labelledby="estimate-title" className="pb-16 lg:pb-24">
       <Container>
-        <div className="rounded-panel border border-line bg-panel p-4 sm:p-8 lg:px-10 lg:py-7">
+        <div data-fit className="rounded-panel border border-line bg-panel p-4 sm:p-8 lg:px-10 lg:py-7">
           <EstimateBuilder />
         </div>
       </Container>
@@ -272,7 +272,7 @@ function Products() {
 
 function RateMatch() {
   return (
-    <section aria-labelledby="rate-match-title" className="border-y border-line bg-panel py-16">
+    <section aria-labelledby="rate-match-title" className="border-y border-line bg-panel py-16 lg:py-24">
       <Container>
         <div className="rounded-panel border border-line bg-white p-6 sm:p-12 lg:p-16">
           <SectionHeading
@@ -315,7 +315,7 @@ function MeetMohamad() {
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-[21px] font-medium text-ink">{advisor.name}</p>
+                <p className="text-[22px] font-medium text-ink">{advisor.name}</p>
                 <p className="text-[17px] text-body">{advisor.title}</p>
                 <p className="text-[16px] font-medium text-navy">
                   Sponsored by {sponsor.shortName} (NMLS #{sponsor.nmls})
@@ -326,7 +326,7 @@ function MeetMohamad() {
 
           <div className="space-y-6 lg:col-span-7">
             <Eyebrow>Personal Accountability</Eyebrow>
-            <h2 id="advisor-title" className="text-[34px] leading-tight tracking-tight text-ink sm:text-[42px]">
+            <h2 id="advisor-title" className="text-[32px] leading-tight tracking-tight text-ink sm:text-[40px]">
               Big-lender options. <br />
               <span className="font-medium">Personal guidance.</span>
             </h2>
